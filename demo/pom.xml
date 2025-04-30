@@ -4,14 +4,14 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  
+
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>3.4.5</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <relativePath/>
   </parent>
 
   <groupId>com.example</groupId>
@@ -20,43 +20,25 @@
   <name>pilot_app</name>
   <description>Demo project for Spring Boot</description>
 
-<!-- ======= هذي الميتاداتا اللي طلبتها ======= -->
-  <url/>
-  <licenses>
-    <license/>
-  </licenses>
-  <developers>
-    <developer/>
-  </developers>
-  <scm>
-    <connection/>
-    <developerConnection/>
-    <tag/>
-    <url/>
-  </scm>
-
   <properties>
     <java.version>17</java.version>
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <openapi-generator.version>6.6.0</openapi-generator.version>
-    <!-- Lombok version -->
     <lombok.version>1.18.26</lombok.version>
   </properties>
 
   <dependencies>
-    <!-- Spring Data JPA -->
+    <!-- Spring Data JPA & Web -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
-
-    <!-- Spring Web -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
-    <!-- DevTools -->
+    <!-- DevTools (watch/auto-restart) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
@@ -79,14 +61,12 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- MapStruct (runtime) -->
+    <!-- MapStruct -->
     <dependency>
       <groupId>org.mapstruct</groupId>
       <artifactId>mapstruct</artifactId>
       <version>${mapstruct.version}</version>
     </dependency>
-
-    <!-- MapStruct Processor (annotation processor) -->
     <dependency>
       <groupId>org.mapstruct</groupId>
       <artifactId>mapstruct-processor</artifactId>
@@ -94,21 +74,66 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- Spring Boot Test -->
+    <!-- Jakarta Validation API -->
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <version>3.0.2</version>
+    </dependency>
+
+    <!-- Jakarta Annotations API -->
+    <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+      <version>2.1.1</version>
+    </dependency>
+
+    <!-- Jakarta Servlet API (provided by container) -->
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Swagger / OpenAPI Annotations & Models -->
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>2.2.8</version>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-models</artifactId>
+      <version>2.2.8</version>
+    </dependency>
+
+    <!-- Jackson nullable support -->
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+      <version>0.2.1</version>
+    </dependency>
+
+    <!-- Springdoc OpenAPI UI (Swagger UI at runtime) -->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>2.1.0</version>
+    </dependency>
+
+    <!-- Testing -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
 
-    <!-- ========== Security & JWT ========== -->
+    <!-- Security & JWT -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
-
-    <!-- JSON Web Tokens (jjwt) -->
-
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt</artifactId>
@@ -118,7 +143,8 @@
 
   <build>
     <plugins>
-      <!-- Compiler Plugin: يعمل مع Lombok و MapStruct -->
+
+      <!-- Compiler plugin: Lombok & MapStruct processors -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -127,13 +153,11 @@
           <source>${java.version}</source>
           <target>${java.version}</target>
           <annotationProcessorPaths>
-            <!-- Lombok processor -->
             <path>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
               <version>${lombok.version}</version>
             </path>
-            <!-- MapStruct processor -->
             <path>
               <groupId>org.mapstruct</groupId>
               <artifactId>mapstruct-processor</artifactId>
@@ -143,7 +167,7 @@
         </configuration>
       </plugin>
 
-      <!-- OpenAPI Generator: يولد Controllers و Models من openapi.yaml -->
+      <!-- OpenAPI Generator plugin with Spring Boot 3 / Jakarta namespaces -->
       <plugin>
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -154,14 +178,17 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <!-- ملف تعريف الـ API -->
               <inputSpec>${project.basedir}/openapi.yaml</inputSpec>
-              <!-- مولّد Spring -->
               <generatorName>spring</generatorName>
-              <!-- حزم الإخراج -->
               <apiPackage>com.example.demo.api</apiPackage>
               <modelPackage>com.example.demo.model</modelPackage>
               <output>${project.build.directory}/generated-sources/openapi</output>
+              <configOptions>
+                <!-- for Spring Boot 3 projects -->
+                <useSpringBoot3>true</useSpringBoot3>
+                <!-- ensure Jakarta EE packages are used -->
+                <useJakartaEe>true</useJakartaEe>
+              </configOptions>
             </configuration>
           </execution>
         </executions>
@@ -180,6 +207,7 @@
           </excludes>
         </configuration>
       </plugin>
+
     </plugins>
   </build>
 

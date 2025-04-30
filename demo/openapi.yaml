@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: Demo API
   version: 0.0.1
-  description: تعريف بسيط لمثال الـ OpenAPI
+  description: التعريف الموحد لواجهة برمجة التطبيقات
 
 servers:
   - url: http://localhost:8080
@@ -22,6 +22,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserDTO'
+    post:
+      summary: إنشاء مستخدم جديد
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+      responses:
+        '201':
+          description: المستخدم الذي تم إنشاؤه
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
 
 components:
   schemas:
@@ -31,9 +47,9 @@ components:
         id:
           type: integer
           example: 1
-        username:
+        name:
           type: string
-          example: "hector"
+          example: "Hector Jackson"
         email:
           type: string
           format: email
