@@ -1,0 +1,53 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      # (اختياري) لو تريد خدمة Docker Compose جاهزة هنا، لكن غالبًا يمكنك استعمال خطوات run
+      # mock_api:
+      #   image: your/mockapi:latest
+      #   ports:
+      #     - 3000:3000
+      #   options: --health-cmd='curl http://localhost:3000/health || exit 1'
+      #   # ...الخ حسب ما تحتاج
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --fatal-warnings
+
+      - name: Run unit & widget tests
+        run: flutter test
+
+      # إذا عندك integration_test:
+      - name: Build Docker images & start services
+        run: docker compose up --build -d
+
+      - name: Run integration tests
+        run: flutter test integration_test/app_test.dart
+
+      - name: Tear down Docker
+        run: docker compose down
