@@ -1,0 +1,40 @@
+openapi: 3.0.1
+info:
+  title: Demo API
+  version: 0.0.1
+  description: تعريف بسيط لمثال الـ OpenAPI
+
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+paths:
+  /users:
+    get:
+      summary: استرجاع جميع المستخدمين
+      operationId: getUsers
+      responses:
+        '200':
+          description: قائمة المستخدمين
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+
+components:
+  schemas:
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: "hector"
+        email:
+          type: string
+          format: email
+          example: "hector@example.com"
