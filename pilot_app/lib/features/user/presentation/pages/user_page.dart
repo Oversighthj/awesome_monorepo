@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// أضف استيراد go_router
 import 'package:go_router/go_router.dart';
 
 import '../providers/user_list_notifier.dart';
-import '../../data/models/user_model.dart';
 import 'user_form_page.dart';
 
 class UserPage extends ConsumerWidget {
@@ -61,15 +59,11 @@ class UserPage extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(child: Text(e.toString())),
       ),
-
-      // أضفنا هنا زر FloatingActionButton للتنقّل إلى صفحة /transports
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // استدعاء المسار المؤدي إلى TransportListPage
           context.push('/transports');
-          // أو: GoRouter.of(context).go('/transports');
         },
-        child: const Icon(Icons.directions_bus), // أيقونة تعبّر عن النقل
+        child: const Icon(Icons.directions_bus),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/user_controller.dart'; // افترضنا لديك ملف user_controller.dart
+
+import '../providers/user_controller.dart';
 import '../../data/models/user_model.dart';
 
 class UserFormPage extends ConsumerStatefulWidget {
@@ -36,25 +37,27 @@ class _UserFormPageState extends ConsumerState<UserFormPage> {
     if (name.isEmpty || email.isEmpty) return;
 
     setState(() => _loading = true);
-    final ctrl = ref.read(userControllerProvider); 
-    // يفترض أن userControllerProvider لديه متد ط addUser() و editUser()
+    final ctrl = ref.read(userControllerProvider);
 
     try {
       if (widget.editingUser == null) {
-        // إضافة مستخدم جديد
         await ctrl.addUser(name, email);
       } else {
-        // تعديل مستخدم قائم
-        // لاحظ هنا يجب التعامل مع أن widget.editingUser!.id يمكن يكون int? 
-        // إذا كنت متأكد أن لديه قيمة فعليّة 100%، ضع علامة ! بعده
+        // handle nullable ID
         await ctrl.editUser(widget.editingUser!.id!, name, email);
       }
-      Navigator.of(context).pop(); // ارجع للقائمة بعد النجاح
+      // safe pop after async
+      if (!mounted) return;
+      Navigator.of(context).pop();
     } catch (e) {
+      // safe snackbar after async
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
     } finally {
+      // only update state if still mounted
+      if (!mounted) return;
       setState(() => _loading = false);
     }
   }

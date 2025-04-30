@@ -1,9 +1,6 @@
-
 name: pilot_app
 description: A new Flutter project.
-
 publish_to: 'none'
-
 version: 1.0.0+1
 
 environment:
@@ -22,6 +19,8 @@ dependencies:
   go_router: ^7.0.1
 
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
   integration_test:
     sdk: flutter
   mocktail: ^0.3.0
