@@ -56,9 +56,10 @@ class _UserFormPageState extends ConsumerState<UserFormPage> {
         SnackBar(content: Text('Error: $e')),
       );
     } finally {
-      // only update state if still mounted
-      if (!mounted) return;
-      setState(() => _loading = false);
+      // تحديث الحالة فقط لو الـ State ما زالت مثبتة
+      if (mounted) {
+        setState(() => _loading = false);
+      }
     }
   }
 
