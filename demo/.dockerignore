@@ -1,0 +1,6 @@
+# استبعاد مخلفات البناء الثقيلة
+target
+.mvn/repository/
+
+# ملفات IntelliJ / IDEA
+**/*.iml

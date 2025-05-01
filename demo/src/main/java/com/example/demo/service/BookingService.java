@@ -10,6 +10,7 @@ import com.example.demo.repository.BookingRepository;
 
 @Service
 public class BookingService {
+
     private final BookingRepository bookingRepository;
 
     public BookingService(BookingRepository bookingRepository) {
