@@ -1,16 +1,10 @@
-
 package com.example.demo.entity;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "bookings")
@@ -20,10 +14,10 @@ public class BookingEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Integer flightId;
+    private String flightId;
 
     @Column(nullable = false)
-    private Integer userId;
+    private String userId;
 
     @Column(nullable = false)
     private Integer seatCount;
@@ -34,15 +28,13 @@ public class BookingEntity {
     @Column(nullable = false)
     private Instant bookingTime;
 
-    // Getter / Setter قياسية للـ id
+    // id ↔ bookingId alias for tests
     public Long getId() {
         return id;
     }
     public void setId(Long id) {
         this.id = id;
     }
-
-    // Alias للاختبارات التي تستدعي setBookingId(...)
     public Long getBookingId() {
         return id;
     }
@@ -50,31 +42,28 @@ public class BookingEntity {
         this.id = bookingId;
     }
 
-    // flightId كـ Integer
-    public Integer getFlightId() {
+    // String flightId + alias for Integer
+    public String getFlightId() {
         return flightId;
     }
-    public void setFlightId(Integer flightId) {
+    public void setFlightId(String flightId) {
         this.flightId = flightId;
     }
-    // Alias إذا أرسل الاختبار قيمة String
-    public void setFlightId(String flightIdStr) {
-        this.flightId = Integer.valueOf(flightIdStr);
+    public void setFlightId(Integer flightId) {
+        this.flightId = String.valueOf(flightId);
     }
 
-    // userId كـ Integer
-    public Integer getUserId() {
+    // String userId + alias for Integer
+    public String getUserId() {
         return userId;
     }
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-    // Alias إذا أرسل الاختبار قيمة String
-    public void setUserId(String userIdStr) {
-        this.userId = Integer.valueOf(userIdStr);
+    public void setUserId(Integer userId) {
+        this.userId = String.valueOf(userId);
     }
 
-    // seatCount
     public Integer getSeatCount() {
         return seatCount;
     }
@@ -82,7 +71,6 @@ public class BookingEntity {
         this.seatCount = seatCount;
     }
 
-    // status
     public String getStatus() {
         return status;
     }
@@ -90,14 +78,13 @@ public class BookingEntity {
         this.status = status;
     }
 
-    // bookingTime كـ Instant
     public Instant getBookingTime() {
         return bookingTime;
     }
     public void setBookingTime(Instant bookingTime) {
         this.bookingTime = bookingTime;
     }
-    // Alias إذا أرسل الاختبار LocalDateTime
+    // alias for tests using LocalDateTime
     public void setBookingTime(LocalDateTime bookingDateTime) {
         this.bookingTime = bookingDateTime.atOffset(ZoneOffset.UTC).toInstant();
     }
