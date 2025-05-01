@@ -1,9 +1,8 @@
-// src/main/java/com/example/demo/controller/BookingController.java
 package com.example.demo.controller;
 
 import com.example.demo.entity.BookingEntity;
+import com.example.demo.model.TransportBookingDTO;
 import com.example.demo.model.BookingResponseDTO;
-import com.example.demo.dto.TransportBookingDTO;
 import com.example.demo.service.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,16 +23,17 @@ public class BookingController {
     @PostMapping("/book")
     @ResponseStatus(HttpStatus.OK)
     public BookingResponseDTO bookTransport(@Valid @RequestBody TransportBookingDTO dto) {
-        // call into your service (now takes the internal DTO)
+        // 1) call service, get back JPA entity
         BookingEntity entity = bookingService.createBooking(dto);
 
-        // map the JPA entity back into the generated API response DTO
+        // 2) map to API DTO
         BookingResponseDTO response = new BookingResponseDTO();
         response.setBookingId(entity.getBookingId().intValue());
-        response.setFlightId(dto.getFlightId());
-        response.setUserId(dto.getUserId());
+        response.setFlightId(entity.getFlightId());
+        response.setUserId(entity.getUserId());
         response.setSeatCount(entity.getSeatCount());
         response.setStatus(entity.getStatus());
+        // convert local date/time to an OffsetDateTime in UTC
         response.setBookingTime(entity.getBookingTime().atOffset(ZoneOffset.UTC));
         return response;
     }
