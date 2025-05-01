@@ -1,14 +1,14 @@
 // src/main/java/com/example/demo/controller/BookingController.java
 package com.example.demo.controller;
 
-import com.example.demo.dto.TransportBookingDTO;
 import com.example.demo.entity.BookingEntity;
+import com.example.demo.model.TransportBookingDTO;
 import com.example.demo.model.BookingResponseDTO;
 import com.example.demo.service.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
 
+import jakarta.validation.Valid;
 import java.time.ZoneOffset;
 
 @RestController
@@ -31,6 +31,7 @@ public class BookingController {
         BookingResponseDTO response = new BookingResponseDTO();
         // bookingId is an Integer in the generated DTO
         response.setBookingId(entity.getBookingId().intValue());
+        // TransportBookingDTO.flightId/userId are Strings
         response.setFlightId(entity.getFlightId());
         response.setUserId(entity.getUserId());
         response.setSeatCount(entity.getSeatCount());
