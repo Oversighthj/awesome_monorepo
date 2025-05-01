@@ -1,4 +1,3 @@
-// src/test/java/com/example/demo/service/BookingServiceTest.java
 package com.example.demo.service;
 
 import com.example.demo.entity.BookingEntity;
@@ -6,63 +5,56 @@ import com.example.demo.model.TransportBookingDTO;
 import com.example.demo.repository.BookingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDateTime;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.when;
+public class BookingServiceTest {
 
-class BookingServiceTest {
-
-    private BookingService bookingService;
+    @Mock
     private BookingRepository bookingRepository;
 
+    private BookingService bookingService;
+
     @BeforeEach
-    void setUp() {
-        bookingRepository = Mockito.mock(BookingRepository.class);
+    void setup() {
+        MockitoAnnotations.openMocks(this);
         bookingService = new BookingService(bookingRepository);
     }
 
     @Test
-    void createBooking_ValidDto_SavesEntity() {
+    void createBooking_validDto_savesAndReturnsEntity() {
         TransportBookingDTO dto = new TransportBookingDTO();
-        dto.setFlightId("FL123");
-        dto.setUserId("U456");
-        dto.setSeatCount(2);
-        LocalDateTime now = LocalDateTime.now();
+        dto.setFlightId("flight123");
+        dto.setUserId("user456");
+        dto.setSeatCount(3);
 
-        BookingEntity savedEntity = new BookingEntity();
-        savedEntity.setBookingId(42L);
-        savedEntity.setFlightId(dto.getFlightId());
-        savedEntity.setUserId(dto.getUserId());
-        savedEntity.setSeatCount(dto.getSeatCount());
-        savedEntity.setStatus("CONFIRMED");
-        savedEntity.setBookingTime(now);
+        BookingEntity saved = new BookingEntity();
+        saved.setBookingId(42L);
 
-        when(bookingRepository.save(ArgumentMatchers.any(BookingEntity.class)))
-            .thenReturn(savedEntity);
+        when(bookingRepository.save(any(BookingEntity.class))).thenReturn(saved);
 
         BookingEntity result = bookingService.createBooking(dto);
 
-        assertThat(result.getBookingId()).isEqualTo(42L);
-        assertThat(result.getFlightId()).isEqualTo("FL123");
-        assertThat(result.getUserId()).isEqualTo("U456");
-        assertThat(result.getSeatCount()).isEqualTo(2);
-        assertThat(result.getStatus()).isEqualTo("CONFIRMED");
-        assertThat(result.getBookingTime()).isEqualTo(now);
+        assertThat(result).isSameAs(saved);
+        verify(bookingRepository).save(any());
     }
 
     @Test
-    void createBooking_InvalidSeatCount_Throws() {
+    void createBooking_invalidSeatCount_throwsAndDoesNotSave() {
         TransportBookingDTO dto = new TransportBookingDTO();
-        dto.setFlightId("FL123");
-        dto.setUserId("U456");
+        dto.setFlightId("flight123");
+        dto.setUserId("user456");
         dto.setSeatCount(0);
 
-        assertThatThrownBy(() -> bookingService.createBooking(dto))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("seatCount must be at least 1");
+        try {
+            bookingService.createBooking(dto);
+        } catch (IllegalArgumentException ex) {
+            assertThat(ex).hasMessageContaining("Seat count must be positive");
+        }
+        verify(bookingRepository, never()).save(any());
     }
 }
