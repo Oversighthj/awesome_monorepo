@@ -31,7 +31,8 @@ class IntegrationBookingTest {
                     """))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.bookingId").isNumber())
-            .andExpect(jsonPath("$.flightId").value("2"))
+            // flightId is now serialized as a String
+            .andExpect(jsonPath("$.flightId").value("1"))
             .andExpect(jsonPath("$.userId").value("2"));
     }
 }

@@ -8,7 +8,7 @@ public class TransportBookingDTO {
     public TransportBookingDTO() {
     }
 
-    // JSON → String, or Jackson will coerce 2 → "2"
+    // JSON → String (Jackson will coerce numbers to strings automatically)
     public String getFlightId() {
         return flightId;
     }
@@ -26,6 +26,7 @@ public class TransportBookingDTO {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+    // allow dto.setUserId(456) in tests
     public void setUserId(Integer userId) {
         this.userId = String.valueOf(userId);
     }
