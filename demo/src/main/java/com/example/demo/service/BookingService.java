@@ -1,10 +1,8 @@
-// src/main/java/com/example/demo/service/BookingService.java
 package com.example.demo.service;
 
-import com.example.demo.dto.TransportBookingDTO;
 import com.example.demo.entity.BookingEntity;
+import com.example.demo.model.TransportBookingDTO;
 import com.example.demo.repository.BookingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,14 +12,12 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
 
-    @Autowired
     public BookingService(BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
     }
 
     /**
-     * Persist a booking entity and return it.
-     * (Tests expect BookingEntity, not a DTO.)
+     * Create and persist a new BookingEntity from the generated TransportBookingDTO.
      */
     public BookingEntity createBooking(TransportBookingDTO dto) {
         BookingEntity entity = new BookingEntity();
