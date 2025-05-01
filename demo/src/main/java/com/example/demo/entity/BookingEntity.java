@@ -1,3 +1,4 @@
+
 package com.example.demo.entity;
 
 import java.time.Instant;
@@ -33,8 +34,7 @@ public class BookingEntity {
     @Column(nullable = false)
     private Instant bookingTime;
 
-    // Standard getters/setters
-
+    // Getter / Setter قياسية للـ id
     public Long getId() {
         return id;
     }
@@ -42,7 +42,7 @@ public class BookingEntity {
         this.id = id;
     }
 
-    // Alias for tests that call setBookingId(...)
+    // Alias للاختبارات التي تستدعي setBookingId(...)
     public Long getBookingId() {
         return id;
     }
@@ -50,28 +50,31 @@ public class BookingEntity {
         this.id = bookingId;
     }
 
+    // flightId كـ Integer
     public Integer getFlightId() {
         return flightId;
     }
     public void setFlightId(Integer flightId) {
         this.flightId = flightId;
     }
-    // Alias for tests that pass a String
+    // Alias إذا أرسل الاختبار قيمة String
     public void setFlightId(String flightIdStr) {
         this.flightId = Integer.valueOf(flightIdStr);
     }
 
+    // userId كـ Integer
     public Integer getUserId() {
         return userId;
     }
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
-    // Alias for tests that pass a String
+    // Alias إذا أرسل الاختبار قيمة String
     public void setUserId(String userIdStr) {
         this.userId = Integer.valueOf(userIdStr);
     }
 
+    // seatCount
     public Integer getSeatCount() {
         return seatCount;
     }
@@ -79,6 +82,7 @@ public class BookingEntity {
         this.seatCount = seatCount;
     }
 
+    // status
     public String getStatus() {
         return status;
     }
@@ -86,13 +90,14 @@ public class BookingEntity {
         this.status = status;
     }
 
+    // bookingTime كـ Instant
     public Instant getBookingTime() {
         return bookingTime;
     }
     public void setBookingTime(Instant bookingTime) {
         this.bookingTime = bookingTime;
     }
-    // Alias for tests that pass LocalDateTime
+    // Alias إذا أرسل الاختبار LocalDateTime
     public void setBookingTime(LocalDateTime bookingDateTime) {
         this.bookingTime = bookingDateTime.atOffset(ZoneOffset.UTC).toInstant();
     }

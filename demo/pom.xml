@@ -58,10 +58,11 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!-- Jackson nullable support -->
     <dependency>
-    <groupId>org.openapitools</groupId>
-    <artifactId>jackson-databind-nullable</artifactId>
-    <version>0.2.3</version>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+      <version>0.2.3</version>
     </dependency>
 
     <!-- Lombok & MapStruct -->
@@ -83,14 +84,14 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- Validation API (already present) -->
+    <!-- Validation API -->
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
       <version>3.0.2</version>
     </dependency>
 
-    <!-- OpenAPI Generator & Swagger -->
+    <!-- OpenAPI & Swagger -->
     <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-annotations</artifactId>
@@ -123,7 +124,7 @@
 
   <build>
     <plugins>
-      <!-- Compiler plugin: Lombok & MapStruct processors -->
+      <!-- Compiler plugin: Lombok & MapStruct -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -162,6 +163,8 @@
               <apiPackage>com.example.demo.api</apiPackage>
               <modelPackage>com.example.demo.model</modelPackage>
               <output>${project.build.directory}/generated-sources/openapi</output>
+              <!-- Prevent duplicate DTO generation -->
+              <generateModels>false</generateModels>
               <configOptions>
                 <useSpringBoot3>true</useSpringBoot3>
                 <useJakartaEe>true</useJakartaEe>

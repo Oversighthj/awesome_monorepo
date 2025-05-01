@@ -1,3 +1,4 @@
+
 package com.example.demo.user;
 
 import jakarta.persistence.*;
@@ -21,5 +22,10 @@ public class User {
     private String name;
     private String email;
 
-    // Lombok يولّد الباقي (constructors, getters, setters, toString, equals/hashCode)
+    // صريحًا أضفنا getter لـ id لتجنب خطأ المترجم بعدم وجوده
+    public Long getId() {
+        return this.id;
+    }
+
+    // بقيّة getters/setters تولدها Lombok (@Data)
 }
