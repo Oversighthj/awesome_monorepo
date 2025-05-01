@@ -53,7 +53,8 @@ public class BookingControllerTest {
 
         BookingResponseDTO resp = controller.bookTransport(dto);
 
-        assertThat(resp.getBookingId()).isEqualTo(1);
+        // ← here we compare to 1L (Long) instead of 1
+        assertThat(resp.getBookingId()).isEqualTo(1L);
         assertThat(resp.getFlightId()).isEqualTo("123");
         assertThat(resp.getUserId()).isEqualTo("456");
         assertThat(resp.getSeatCount()).isEqualTo(2);
