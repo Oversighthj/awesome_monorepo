@@ -1,19 +1,18 @@
 // src/test/java/com/example/demo/controller/BookingControllerTest.java
 package com.example.demo.controller;
 
-import com.example.demo.dto.TransportBookingDTO;
-import com.example.demo.entity.BookingEntity;
+import com.example.demo.controller.BookingController;
+import com.example.demo.model.TransportBookingDTO;
+import com.example.demo.model.BookingResponseDTO;
 import com.example.demo.service.BookingService;
-import com.example.demo.security.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -21,8 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = BookingController.class)
-@Import(SecurityConfig.class)
-public class BookingControllerTest {
+class BookingControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,22 +29,22 @@ public class BookingControllerTest {
     private BookingService bookingService;
 
     @Test
-    public void bookTransport_ValidPayload_ReturnsBooking() throws Exception {
-        TransportBookingDTO dto = new TransportBookingDTO();
-        dto.setFlightId(1L);
-        dto.setUserId(2L);
-        dto.setSeatCount(3);
+    void bookTransport_ValidPayload_ReturnsBooking() throws Exception {
+        // build request DTO
+        TransportBookingDTO request = new TransportBookingDTO();
+        request.setFlightId(1L);
+        request.setUserId(2L);
+        request.setSeatCount(3);
 
-        BookingEntity booking = new BookingEntity();
-        booking.setBookingId(100L);
-        booking.setFlightId(dto.getFlightId());
-        booking.setUserId(dto.getUserId());
-        booking.setSeatCount(dto.getSeatCount());
-        booking.setStatus("CONFIRMED");
-        booking.setBookingTime(LocalDateTime.now());
+        // stub service
+        BookingResponseDTO resp = new BookingResponseDTO();
+        resp.setBookingId(100);
+        resp.setFlightId("2");
+        resp.setUserId("2");
+        resp.setBookedAt(OffsetDateTime.now());
+        when(bookingService.bookTransport(any(TransportBookingDTO.class))).thenReturn(resp);
 
-        when(bookingService.createBooking(any(TransportBookingDTO.class))).thenReturn(booking);
-
+        // perform with numeric JSON
         mockMvc.perform(post("/transport/book")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
@@ -58,11 +56,12 @@ public class BookingControllerTest {
                     """))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.bookingId").value(100))
-            .andExpect(jsonPath("$.status").value("CONFIRMED"));
+            .andExpect(jsonPath("$.flightId").value("2"))
+            .andExpect(jsonPath("$.userId").value("2"));
     }
 
     @Test
-    public void bookTransport_InvalidSeatCount_ReturnsBadRequest() throws Exception {
+    void bookTransport_InvalidSeatCount_ReturnsBadRequest() throws Exception {
         mockMvc.perform(post("/transport/book")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
