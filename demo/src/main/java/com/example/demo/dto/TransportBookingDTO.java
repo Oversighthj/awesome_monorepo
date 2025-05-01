@@ -7,28 +7,42 @@ import jakarta.validation.constraints.NotNull;
 public class TransportBookingDTO {
 
     @NotNull
-    private Long flightId;
+    private String flightId;
 
     @NotNull
-    private Long userId;
+    private String userId;
 
     @NotNull @Min(1)
     private Integer seatCount;
 
-    public Long getFlightId() {
+    // ───────────────
+    // Getters & Setters
+    // ───────────────
+
+    public String getFlightId() {
         return flightId;
     }
 
-    public void setFlightId(Long flightId) {
+    public void setFlightId(String flightId) {
         this.flightId = flightId;
     }
 
-    public Long getUserId() {
+    /** Overload so tests can call setFlightId(1L) */
+    public void setFlightId(long flightId) {
+        this.flightId = Long.toString(flightId);
+    }
+
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    /** Overload so tests can call setUserId(1L) */
+    public void setUserId(long userId) {
+        this.userId = Long.toString(userId);
     }
 
     public Integer getSeatCount() {

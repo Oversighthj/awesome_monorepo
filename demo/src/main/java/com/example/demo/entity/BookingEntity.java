@@ -1,3 +1,4 @@
+// src/main/java/com/example/demo/entity/BookingEntity.java
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
@@ -27,9 +28,9 @@ public class BookingEntity {
     @Column(nullable = false)
     private LocalDateTime bookingTime;
 
-    // -----------------------
+    // ───────────
     // Standard getters/setters
-    // -----------------------
+    // ───────────
 
     public Long getBookingId() {
         return bookingId;
@@ -79,21 +80,16 @@ public class BookingEntity {
         this.bookingTime = bookingTime;
     }
 
-    // -----------------------
-    // Alias methods for tests
-    // -----------------------
+    // ───────────
+    // Alias methods for existing tests
+    // ───────────
 
-    /** For tests expecting getId()/setId(Long) */
+    /** Tests expect getId()/setId(...) */
     public Long getId() {
         return bookingId;
     }
 
     public void setId(Long id) {
         this.bookingId = id;
-    }
-
-    /** To support tests that pass String IDs */
-    public void setId(String id) {
-        this.bookingId = (id == null ? null : Long.valueOf(id));
     }
 }
