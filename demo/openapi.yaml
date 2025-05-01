@@ -126,6 +126,7 @@ components:
         status:
           type: string
           example: "CONFIRMED"
+        # حقل زمني بنسق ISO-8601 (OffsetDateTime) — مطلوب لاجتياز الاختبار
         bookingTime:
           type: string
           format: date-time

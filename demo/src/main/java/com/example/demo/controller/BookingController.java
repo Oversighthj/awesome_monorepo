@@ -7,9 +7,12 @@ import com.example.demo.model.BookingResponseDTO;
 import com.example.demo.model.TransportBookingDTO;
 import com.example.demo.service.BookingService;
 
+import java.time.ZoneOffset;   // ✅ استيراد لضبط التوقيت
+
 @RestController
 @RequestMapping("/transport")
 public class BookingController {
+
     private final BookingService bookingService;
 
     public BookingController(BookingService bookingService) {
@@ -26,7 +29,8 @@ public class BookingController {
         resp.setUserId(entity.getUserId());
         resp.setSeatCount(entity.getSeatCount());
         resp.setStatus(entity.getStatus());
-        resp.setBookingTime(entity.getBookingTime().toString());
+        // نحفظ التوقيت كـ OffsetDateTime متوافق مع الـ DTO الجديد
+        resp.setBookingTime(entity.getBookingTime().atOffset(ZoneOffset.UTC));
         return resp;
     }
 }
