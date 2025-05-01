@@ -1,23 +1,28 @@
-// src/main/java/com/example/demo/entity/BookingEntity.java
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "bookings")
 public class BookingEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "booking_id")
-    private Long bookingId;
+    private Long id;
 
     @Column(nullable = false)
-    private String flightId;
+    private Integer flightId;
 
     @Column(nullable = false)
-    private String userId;
+    private Integer userId;
 
     @Column(nullable = false)
     private Integer seatCount;
@@ -26,40 +31,50 @@ public class BookingEntity {
     private String status;
 
     @Column(nullable = false)
-    private LocalDateTime bookingTime;
+    private Instant bookingTime;
 
-    // ───────────
     // Standard getters/setters
-    // ───────────
 
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    // Alias for tests that call setBookingId(...)
     public Long getBookingId() {
-        return bookingId;
+        return id;
     }
-
     public void setBookingId(Long bookingId) {
-        this.bookingId = bookingId;
+        this.id = bookingId;
     }
 
-    public String getFlightId() {
+    public Integer getFlightId() {
         return flightId;
     }
-
-    public void setFlightId(String flightId) {
+    public void setFlightId(Integer flightId) {
         this.flightId = flightId;
     }
-
-    public String getUserId() {
-        return userId;
+    // Alias for tests that pass a String
+    public void setFlightId(String flightIdStr) {
+        this.flightId = Integer.valueOf(flightIdStr);
     }
 
-    public void setUserId(String userId) {
+    public Integer getUserId() {
+        return userId;
+    }
+    public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+    // Alias for tests that pass a String
+    public void setUserId(String userIdStr) {
+        this.userId = Integer.valueOf(userIdStr);
     }
 
     public Integer getSeatCount() {
         return seatCount;
     }
-
     public void setSeatCount(Integer seatCount) {
         this.seatCount = seatCount;
     }
@@ -67,29 +82,18 @@ public class BookingEntity {
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
 
-    public LocalDateTime getBookingTime() {
+    public Instant getBookingTime() {
         return bookingTime;
     }
-
-    public void setBookingTime(LocalDateTime bookingTime) {
+    public void setBookingTime(Instant bookingTime) {
         this.bookingTime = bookingTime;
     }
-
-    // ───────────
-    // Alias methods for existing tests
-    // ───────────
-
-    /** Tests expect getId()/setId(...) */
-    public Long getId() {
-        return bookingId;
-    }
-
-    public void setId(Long id) {
-        this.bookingId = id;
+    // Alias for tests that pass LocalDateTime
+    public void setBookingTime(LocalDateTime bookingDateTime) {
+        this.bookingTime = bookingDateTime.atOffset(ZoneOffset.UTC).toInstant();
     }
 }
