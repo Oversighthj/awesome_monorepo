@@ -3,6 +3,7 @@ info:
   title: Demo API
   version: 0.0.1
   description: التعريف الموحد لواجهة برمجة التطبيقات
+
 servers:
   - url: http://localhost:8080
     description: Local server
@@ -21,6 +22,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserDTO'
+
     post:
       summary: إنشاء مستخدم جديد
       operationId: createUser
@@ -77,6 +79,7 @@ paths:
 
 components:
   schemas:
+
     UserDTO:
       type: object
       properties:
@@ -126,8 +129,9 @@ components:
         status:
           type: string
           example: "CONFIRMED"
-        # حقل زمني بنسق ISO-8601 (OffsetDateTime) — مطلوب لاجتياز الاختبار
+        # حقل زمني بصيغة ISO-8601 وسيولَّد كـ OffsetDateTime في الجافا
         bookingTime:
           type: string
           format: date-time
+          x-java-type: java.time.OffsetDateTime
           example: "2025-04-30T15:30:00Z"

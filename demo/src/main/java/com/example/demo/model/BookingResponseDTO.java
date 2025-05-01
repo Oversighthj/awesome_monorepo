@@ -1,17 +1,29 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.OffsetDateTime;
+
+/**
+ * بيانات استجابة حجز الرحلة.
+ */
 public class BookingResponseDTO {
+
     private Long bookingId;
     private String flightId;
     private String userId;
     private Integer seatCount;
     private String status;
-    private String bookingTime;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)          // تُعاد كسلسلة ISO-8601
+    private OffsetDateTime bookingTime;                   // ✅ أصبح OffsetDateTime
 
     public BookingResponseDTO() {
+        // no-args constructor
     }
+
+    // --- Getters & Setters ---
 
     @JsonProperty("bookingId")
     public Long getBookingId() {
@@ -54,10 +66,10 @@ public class BookingResponseDTO {
     }
 
     @JsonProperty("bookingTime")
-    public String getBookingTime() {
+    public OffsetDateTime getBookingTime() {
         return bookingTime;
     }
-    public void setBookingTime(String bookingTime) {
+    public void setBookingTime(OffsetDateTime bookingTime) {
         this.bookingTime = bookingTime;
     }
 }
