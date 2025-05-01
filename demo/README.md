@@ -115,5 +115,17 @@ cd demo
 
 ---
 
+## Transport Booking
+
+**Endpoint:** `POST /transport/book`
+
+**Request JSON:**
+```json
+{
+  "flightId": "FL123",
+  "userId": "1",
+  "seatCount": 2
+}
+
 > يمكنك التوسيع بحقل "License" أو وصلات إضافية حسب الحاجة.
 

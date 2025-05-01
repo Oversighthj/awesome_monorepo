@@ -3,7 +3,6 @@ info:
   title: Demo API
   version: 0.0.1
   description: التعريف الموحد لواجهة برمجة التطبيقات
-
 servers:
   - url: http://localhost:8080
     description: Local server
@@ -31,6 +30,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UserDTO'
+            example:
+              id: 1
+              name: "Hector Jackson"
+              email: "hector@example.com"
       responses:
         '201':
           description: المستخدم الذي تم إنشاؤه
@@ -38,6 +41,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDTO'
+              example:
+                id: 1
+                name: "Hector Jackson"
+                email: "hector@example.com"
+
+  /transport/book:
+    post:
+      summary: حجز رحلة
+      operationId: bookTransport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransportBookingDTO'
+            example:
+              flightId: "FL123"
+              userId: "1"
+              seatCount: 2
+      responses:
+        '200':
+          description: تأكيد الحجز
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponseDTO'
+              example:
+                bookingId: 1001
+                flightId: "FL123"
+                userId: "1"
+                seatCount: 2
+                status: "CONFIRMED"
+                bookingTime: "2025-04-30T15:30:00Z"
 
 components:
   schemas:
@@ -54,3 +90,43 @@ components:
           type: string
           format: email
           example: "hector@example.com"
+
+    TransportBookingDTO:
+      type: object
+      properties:
+        flightId:
+          type: string
+          example: "FL123"
+        userId:
+          type: string
+          example: "1"
+        seatCount:
+          type: integer
+          example: 2
+      required:
+        - flightId
+        - userId
+        - seatCount
+
+    BookingResponseDTO:
+      type: object
+      properties:
+        bookingId:
+          type: integer
+          example: 1001
+        flightId:
+          type: string
+          example: "FL123"
+        userId:
+          type: string
+          example: "1"
+        seatCount:
+          type: integer
+          example: 2
+        status:
+          type: string
+          example: "CONFIRMED"
+        bookingTime:
+          type: string
+          format: date-time
+          example: "2025-04-30T15:30:00Z"
