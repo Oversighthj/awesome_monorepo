@@ -1,5 +1,10 @@
+// src/main/java/com/example/demo/user/UserController.java
 package com.example.demo.user;
 
+import com.example.demo.user.UserRepository;
+import com.example.demo.user.UserMapper;
+import com.example.demo.user.User;
+import com.example.demo.user.UserDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,50 +15,45 @@ import java.util.stream.Collectors;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository repo;
-    private final UserMapper mapper;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserController(UserRepository repo, UserMapper mapper) {
-        this.repo = repo;
-        this.mapper = mapper;
+    public UserController(UserRepository userRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
-    // ============ GET All ============
     @GetMapping
-    public List<UserDTO> getAll() {
-        return repo.findAll().stream()
-                   .map(mapper::toDto)
-                   .collect(Collectors.toList());
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll()
+            .stream()
+            .map(userMapper::toDto)
+            .collect(Collectors.toList());
     }
 
-    // ============ POST Create ============
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO create(@RequestBody UserDTO dto) {
-        User entity = mapper.toEntity(dto);
-        entity.setId(null);
-        User saved = repo.save(entity);
-        return mapper.toDto(saved);
+    public UserDTO createUser(@RequestBody UserDTO userDto) {
+        User toSave = userMapper.toEntity(userDto);
+        // ensure a new entity
+        toSave.setId(null);
+        User saved = userRepository.save(toSave);
+        return userMapper.toDto(saved);
     }
 
-    // ============ PUT Update ============
     @PutMapping("/{id}")
-    public UserDTO update(
-        @PathVariable Long id,
-        @RequestBody UserDTO dto
-    ) {
-        User existing = repo.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-        existing.setName(dto.getName());
-        existing.setEmail(dto.getEmail());
-        User updated = repo.save(existing);
-        return mapper.toDto(updated);
+    public UserDTO updateUser(@PathVariable Long id, @RequestBody UserDTO userDto) {
+        User existing = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found for id: " + id));
+        existing.setName(userDto.getName());
+        existing.setEmail(userDto.getEmail());
+        User updated = userRepository.save(existing);
+        return userMapper.toDto(updated);
     }
 
-    // ============ DELETE ============
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        repo.deleteById(id);
+    public void deleteUser(@PathVariable Long id) {
+        userRepository.deleteById(id);
     }
 }
