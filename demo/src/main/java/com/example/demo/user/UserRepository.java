@@ -1,9 +1,11 @@
 package com.example.demo.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-// هذا الانترفيس يتيح لك CRUD بدون كتابة SQL
+/**
+ * يوفّر عمليات CRUD كاملة على كيان {@code User}
+ * بدون الحاجة لكتابة SQL يدوي.
+ */
 public interface UserRepository extends JpaRepository<User, Long> {
     // يمكنك إضافة دوال بحث مخصّصة هنا لو أردت
 }
