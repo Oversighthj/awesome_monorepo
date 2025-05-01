@@ -1,4 +1,3 @@
-
 package com.example.demo.service;
 
 import java.time.Instant;
@@ -20,7 +19,7 @@ public class BookingService {
     public BookingEntity createBooking(TransportBookingDTO dto) {
         // 1) Validate seatCount before saving
         if (dto.getSeatCount() <= 0) {
-            throw new IllegalArgumentException("Invalid seat count: " + dto.getSeatCount());
+            throw new IllegalArgumentException("Seat count must be positive");
         }
 
         // 2) Map DTO → Entity
