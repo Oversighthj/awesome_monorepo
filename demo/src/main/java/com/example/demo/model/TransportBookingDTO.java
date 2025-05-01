@@ -14,12 +14,20 @@ public class TransportBookingDTO {
     public void setFlightId(Integer flightId) {
         this.flightId = flightId;
     }
+    // alias لاستقبال الاختبارات قيمة String
+    public void setFlightId(String flightIdStr) {
+        this.flightId = Integer.valueOf(flightIdStr);
+    }
 
     public Integer getUserId() {
         return userId;
     }
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+    // alias لاستقبال الاختبارات قيمة String
+    public void setUserId(String userIdStr) {
+        this.userId = Integer.valueOf(userIdStr);
     }
 
     public Integer getSeatCount() {

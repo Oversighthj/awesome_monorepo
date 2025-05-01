@@ -1,5 +1,7 @@
+
 package com.example.demo.model;
 
+import java.time.OffsetDateTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BookingResponseDTO {
@@ -8,7 +10,7 @@ public class BookingResponseDTO {
     private Integer userId;
     private Integer seatCount;
     private String status;
-    private String bookingTime;
+    private OffsetDateTime bookingTime;
 
     public BookingResponseDTO() {
     }
@@ -54,10 +56,10 @@ public class BookingResponseDTO {
     }
 
     @JsonProperty("bookingTime")
-    public String getBookingTime() {
+    public OffsetDateTime getBookingTime() {
         return bookingTime;
     }
-    public void setBookingTime(String bookingTime) {
+    public void setBookingTime(OffsetDateTime bookingTime) {
         this.bookingTime = bookingTime;
     }
 }

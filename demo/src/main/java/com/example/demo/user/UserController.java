@@ -19,7 +19,7 @@ public class UserController {
 
     public UserController(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
+        this.userMapper   = userMapper;
     }
 
     @GetMapping
@@ -32,32 +32,30 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO createUser(@Valid @RequestBody UserDTO userDto) {
-        // model.UserDTO → user.User
-        User saved = userRepository.save(userMapper.toEntity(userDto));
-        // user.User → model.UserDTO
+        var saved = userRepository.save(userMapper.toEntity(userDto));
         return userMapper.toDto(saved);
     }
 
     @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable Long id) {
-        User u = userRepository.findById(id)
+        var user = userRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "User not found with id " + id));
-        return userMapper.toDto(u);
+        return userMapper.toDto(user);
     }
 
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable Long id,
                               @Valid @RequestBody UserDTO userDto) {
-        User existing = userRepository.findById(id)
+        var existing = userRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "User not found with id " + id));
 
-        // Ensure the DTO’s id matches the path
-        userDto.setId(existing.getId().intValue());
+        // ← تعديل هنا: نبقي على Long وليس .intValue()
+        userDto.setId(existing.getId());
 
-        User updated = userMapper.toEntity(userDto);
-        User saved   = userRepository.save(updated);
+        var updated = userMapper.toEntity(userDto);
+        var saved   = userRepository.save(updated);
         return userMapper.toDto(saved);
     }
 
