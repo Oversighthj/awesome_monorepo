@@ -1,4 +1,3 @@
-// src/main/java/com/example/demo/entity/BookingEntity.java
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
@@ -14,10 +13,10 @@ public class BookingEntity {
     private Long bookingId;
 
     @Column(nullable = false)
-    private Long flightId;
+    private String flightId;
 
     @Column(nullable = false)
-    private Long userId;
+    private String userId;
 
     @Column(nullable = false)
     private Integer seatCount;
@@ -28,6 +27,10 @@ public class BookingEntity {
     @Column(nullable = false)
     private LocalDateTime bookingTime;
 
+    // -----------------------
+    // Standard getters/setters
+    // -----------------------
+
     public Long getBookingId() {
         return bookingId;
     }
@@ -36,19 +39,19 @@ public class BookingEntity {
         this.bookingId = bookingId;
     }
 
-    public Long getFlightId() {
+    public String getFlightId() {
         return flightId;
     }
 
-    public void setFlightId(Long flightId) {
+    public void setFlightId(String flightId) {
         this.flightId = flightId;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -74,5 +77,23 @@ public class BookingEntity {
 
     public void setBookingTime(LocalDateTime bookingTime) {
         this.bookingTime = bookingTime;
+    }
+
+    // -----------------------
+    // Alias methods for tests
+    // -----------------------
+
+    /** For tests expecting getId()/setId(Long) */
+    public Long getId() {
+        return bookingId;
+    }
+
+    public void setId(Long id) {
+        this.bookingId = id;
+    }
+
+    /** To support tests that pass String IDs */
+    public void setId(String id) {
+        this.bookingId = (id == null ? null : Long.valueOf(id));
     }
 }
