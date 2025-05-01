@@ -1,36 +1,78 @@
+// src/main/java/com/example/demo/entity/BookingEntity.java
 package com.example.demo.entity;
 
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookings")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class BookingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("bookingId")
-    private Long id;
+    @Column(name = "booking_id")
+    private Long bookingId;
 
-    private String flightId;
+    @Column(nullable = false)
+    private Long flightId;
 
-    private String userId;
+    @Column(nullable = false)
+    private Long userId;
 
-    private int seatCount;
+    @Column(nullable = false)
+    private Integer seatCount;
 
+    @Column(nullable = false)
     private String status;
 
-    @JsonProperty("bookingTime")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+    @Column(nullable = false)
     private LocalDateTime bookingTime;
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public Long getFlightId() {
+        return flightId;
+    }
+
+    public void setFlightId(Long flightId) {
+        this.flightId = flightId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Integer getSeatCount() {
+        return seatCount;
+    }
+
+    public void setSeatCount(Integer seatCount) {
+        this.seatCount = seatCount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getBookingTime() {
+        return bookingTime;
+    }
+
+    public void setBookingTime(LocalDateTime bookingTime) {
+        this.bookingTime = bookingTime;
+    }
 }
