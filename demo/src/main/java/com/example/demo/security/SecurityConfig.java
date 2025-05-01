@@ -10,17 +10,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(auth -> auth
-            .anyRequest().permitAll()  // أي مسار مفتوح!
-        )
-        .headers(headers -> headers.frameOptions(frame -> frame.disable()))
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-  
-    return http.build();
-  }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+          .csrf(csrf -> csrf.disable())                                      // disable CSRF for easier testing
+          .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())       // allow all endpoints without auth
+          .headers(headers -> headers.frameOptions(frame -> frame.disable())) // allow H2 console frames if needed
+          .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        return http.build();
+    }
 }
