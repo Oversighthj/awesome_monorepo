@@ -4,9 +4,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+  <!-- ───────────── POM Model ───────────── -->
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- ───────── Parent ───────── -->
+  <!-- ───────────── Parent ───────────── -->
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -14,29 +15,32 @@
     <relativePath/>
   </parent>
 
-  <!-- ───────── GAV ───────── -->
+  <!-- ───────────── GAV ───────────── -->
   <groupId>com.example</groupId>
   <artifactId>demo</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>pilot_app</name>
   <description>Demo project for Spring Boot</description>
 
-  <!-- ───────── Properties ───────── -->
+  <!-- ───────────── Properties ───────────── -->
   <properties>
     <java.version>17</java.version>
+
+    <!-- Versions -->
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <openapi-generator.version>6.6.0</openapi-generator.version>
     <lombok.version>1.18.26</lombok.version>
     <flyway.version>9.22.3</flyway.version>
     <testcontainers.version>1.19.3</testcontainers.version>
 
-    <!-- يحدّد الصفّ الرئيسي لمنع خطأ "multiple main classes" -->
+    <!-- يحدّد Main class لمنع "multiple main classes" -->
     <start-class>com.example.demo.PilotAppApplication</start-class>
   </properties>
 
-  <!-- ───────── Dependencies ───────── -->
+  <!-- ───────────── Dependencies ───────────── -->
   <dependencies>
-    <!-- Spring Data + Web -->
+
+    <!-- Spring Boot Web + JPA -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -52,7 +56,7 @@
       <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
-    <!-- DevTools -->
+    <!-- DevTools (Hot-Reload) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
@@ -60,21 +64,21 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- H2 (test/runtime) -->
+    <!-- H2 in-memory DB (runtime/test) -->
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
     </dependency>
 
-    <!-- Flyway -->
+    <!-- Flyway (DB migrations) -->
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-core</artifactId>
       <version>${flyway.version}</version>
     </dependency>
 
-    <!-- Jackson-nullable -->
+    <!-- Jackson nullable helpers (OpenAPI) -->
     <dependency>
       <groupId>org.openapitools</groupId>
       <artifactId>jackson-databind-nullable</artifactId>
@@ -100,26 +104,21 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- Validation API -->
+    <!-- Jakarta Validation API (explicit) -->
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
       <version>3.0.2</version>
     </dependency>
 
-    <!-- OpenAPI & Swagger -->
-    <dependency>
-      <groupId>io.swagger.core.v3</groupId>
-      <artifactId>swagger-annotations</artifactId>
-      <version>2.2.8</version>
-    </dependency>
+    <!-- Springdoc (Swagger UI) -->
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
       <version>2.1.0</version>
     </dependency>
 
-    <!-- Security & JWT -->
+    <!-- Spring Security + JWT -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
@@ -138,7 +137,7 @@
     </dependency>
   </dependencies>
 
-  <!-- ───────── Dependency-Management ───────── -->
+  <!-- ───────────── Dependency-Management ───────────── -->
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -151,10 +150,11 @@
     </dependencies>
   </dependencyManagement>
 
-  <!-- ───────── Build Plugins ───────── -->
+  <!-- ───────────── Build Plugins ───────────── -->
   <build>
     <plugins>
-      <!-- Compiler -->
+
+      <!-- Compiler (with Lombok + MapStruct processors) -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -194,9 +194,30 @@
               <configOptions>
                 <useSpringBoot3>true</useSpringBoot3>
                 <useJakartaEe>true</useJakartaEe>
-                <!-- لا نولّد Main اضافي -->
+                <!-- لا نولّد Main إضافي -->
                 <skipMainApplication>true</skipMainApplication>
               </configOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Build-Helper: add generated OpenAPI sources to compilation -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.5.0</version>
+        <executions>
+          <execution>
+            <id>add-openapi-sources</id>
+            <phase>generate-sources</phase>
+            <goals><goal>add-source</goal></goals>
+            <configuration>
+              <sources>
+                <source>
+                  ${project.build.directory}/generated-sources/openapi/src/main/java
+                </source>
+              </sources>
             </configuration>
           </execution>
         </executions>
