@@ -33,7 +33,7 @@ public class BookingController {
         response.setUserId(entity.getUserId());
         response.setSeatCount(entity.getSeatCount());
         response.setStatus(entity.getStatus());
-        // convert local date/time to an OffsetDateTime in UTC
+        // BookingResponseDTO expects an OffsetDateTime
         response.setBookingTime(entity.getBookingTime().atOffset(ZoneOffset.UTC));
         return response;
     }
