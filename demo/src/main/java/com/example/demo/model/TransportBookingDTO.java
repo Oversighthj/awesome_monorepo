@@ -1,33 +1,33 @@
 package com.example.demo.model;
 
 public class TransportBookingDTO {
-    private Integer flightId;
-    private Integer userId;
+    private String flightId;
+    private String userId;
     private Integer seatCount;
 
     public TransportBookingDTO() {
     }
 
-    public Integer getFlightId() {
+    // JSON → String, or Jackson will coerce 2 → "2"
+    public String getFlightId() {
         return flightId;
     }
-    public void setFlightId(Integer flightId) {
+    public void setFlightId(String flightId) {
         this.flightId = flightId;
     }
-    // alias لاستقبال الاختبارات قيمة String
-    public void setFlightId(String flightIdStr) {
-        this.flightId = Integer.valueOf(flightIdStr);
+    // allow dto.setFlightId(123) in tests, too
+    public void setFlightId(Integer flightId) {
+        this.flightId = String.valueOf(flightId);
     }
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-    // alias لاستقبال الاختبارات قيمة String
-    public void setUserId(String userIdStr) {
-        this.userId = Integer.valueOf(userIdStr);
+    public void setUserId(Integer userId) {
+        this.userId = String.valueOf(userId);
     }
 
     public Integer getSeatCount() {

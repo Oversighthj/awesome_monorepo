@@ -1,7 +1,5 @@
 package com.example.demo.controller;
 
-import java.time.ZoneOffset;
-
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.BookingEntity;
@@ -23,13 +21,12 @@ public class BookingController {
         BookingEntity entity = bookingService.createBooking(dto);
 
         BookingResponseDTO resp = new BookingResponseDTO();
-        resp.setBookingId(entity.getBookingId());               // Long
-        resp.setFlightId(entity.getFlightId());                 // Integer
-        resp.setUserId(entity.getUserId());                     // Integer
-        resp.setSeatCount(entity.getSeatCount());               // Integer
-        resp.setStatus(entity.getStatus());                     // String
-        // تحويل Instant → OffsetDateTime UTC
-        resp.setBookingTime(entity.getBookingTime().atOffset(ZoneOffset.UTC));
+        resp.setBookingId(entity.getBookingId());
+        resp.setFlightId(entity.getFlightId());
+        resp.setUserId(entity.getUserId());
+        resp.setSeatCount(entity.getSeatCount());
+        resp.setStatus(entity.getStatus());
+        resp.setBookingTime(entity.getBookingTime().toString());
         return resp;
     }
 }

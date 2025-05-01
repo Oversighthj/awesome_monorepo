@@ -1,16 +1,14 @@
-
 package com.example.demo.model;
 
-import java.time.OffsetDateTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BookingResponseDTO {
     private Long bookingId;
-    private Integer flightId;
-    private Integer userId;
+    private String flightId;
+    private String userId;
     private Integer seatCount;
     private String status;
-    private OffsetDateTime bookingTime;
+    private String bookingTime;
 
     public BookingResponseDTO() {
     }
@@ -24,18 +22,18 @@ public class BookingResponseDTO {
     }
 
     @JsonProperty("flightId")
-    public Integer getFlightId() {
+    public String getFlightId() {
         return flightId;
     }
-    public void setFlightId(Integer flightId) {
+    public void setFlightId(String flightId) {
         this.flightId = flightId;
     }
 
     @JsonProperty("userId")
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -56,10 +54,10 @@ public class BookingResponseDTO {
     }
 
     @JsonProperty("bookingTime")
-    public OffsetDateTime getBookingTime() {
+    public String getBookingTime() {
         return bookingTime;
     }
-    public void setBookingTime(OffsetDateTime bookingTime) {
+    public void setBookingTime(String bookingTime) {
         this.bookingTime = bookingTime;
     }
 }
