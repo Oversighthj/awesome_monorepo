@@ -1,12 +1,13 @@
 HELP.md
-target/
 
-# ─────────────────────────────────────────────
-# Allow ONLY the OpenAPI generated sources
-# (everything else in target/ remains ignored)
-# ─────────────────────────────────────────────
-!/target/generated-sources/
-!/target/generated-sources/**
+###############################################################################
+# Ignore everything in target …                                               #
+# … لكن أُعيد إظهار generated-sources فقط                                     #
+###############################################################################
+/target/*                         # احجب كل شيء داخل target
+!/target/                         # ❶ أعد إظهار الدليل نفسه
+!/target/generated-sources/       # ❷ أعد إظهار مجلد generated-sources
+!/target/generated-sources/**     # ❸ أعد إظهار كل ما تحته
 
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

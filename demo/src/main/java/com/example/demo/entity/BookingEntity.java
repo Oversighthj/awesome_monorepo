@@ -1,91 +1,116 @@
 package com.example.demo.entity;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-
+import com.example.demo.model.BookingStatus;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "bookings")
 public class BookingEntity {
+
+    // ─────────────── أساسيات ───────────────
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String flightId;
+    private Long userId;
+
+    @Column(nullable = false, length = 255)
+    private String resourceId;          // الغرفة / السيارة / المكتب المحجوز
+
+    // ─────────────── التوقيت ───────────────
+    @Column(nullable = false)
+    private OffsetDateTime startTime;
 
     @Column(nullable = false)
-    private String userId;
+    private OffsetDateTime endTime;
+
+    // ─────────────── السعر والحالة ───────────────
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalPrice;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private BookingStatus status = BookingStatus.PENDING;
+
+    // ─────────────── طوابع زمنية تلقائية ───────────────
+    @Column(nullable = false, updatable = false)
+    private OffsetDateTime createdAt = OffsetDateTime.now();
 
     @Column(nullable = false)
-    private Integer seatCount;
+    private OffsetDateTime updatedAt = OffsetDateTime.now();
 
-    @Column(nullable = false)
-    private String status;
+    // ─────────────── Getters / Setters ───────────────
 
-    @Column(nullable = false)
-    private Instant bookingTime;
-
-    // id ↔ bookingId alias for tests
     public Long getId() {
         return id;
     }
     public void setId(Long id) {
         this.id = id;
     }
-    public Long getBookingId() {
-        return id;
-    }
-    public void setBookingId(Long bookingId) {
-        this.id = bookingId;
-    }
 
-    // String flightId + alias for Integer
-    public String getFlightId() {
-        return flightId;
-    }
-    public void setFlightId(String flightId) {
-        this.flightId = flightId;
-    }
-    public void setFlightId(Integer flightId) {
-        this.flightId = String.valueOf(flightId);
-    }
-
-    // String userId + alias for Integer
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
-    public void setUserId(Integer userId) {
-        this.userId = String.valueOf(userId);
+
+    public String getResourceId() {
+        return resourceId;
+    }
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
     }
 
-    public Integer getSeatCount() {
-        return seatCount;
+    public OffsetDateTime getStartTime() {
+        return startTime;
     }
-    public void setSeatCount(Integer seatCount) {
-        this.seatCount = seatCount;
+    public void setStartTime(OffsetDateTime startTime) {
+        this.startTime = startTime;
     }
 
-    public String getStatus() {
+    public OffsetDateTime getEndTime() {
+        return endTime;
+    }
+    public void setEndTime(OffsetDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public BookingStatus getStatus() {
         return status;
     }
-    public void setStatus(String status) {
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 
-    public Instant getBookingTime() {
-        return bookingTime;
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
     }
-    public void setBookingTime(Instant bookingTime) {
-        this.bookingTime = bookingTime;
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
     }
-    // alias for tests using LocalDateTime
-    public void setBookingTime(LocalDateTime bookingDateTime) {
-        this.bookingTime = bookingDateTime.atOffset(ZoneOffset.UTC).toInstant();
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    // ─────────────── lifecycle hooks لتحديث updatedAt ───────────────
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = OffsetDateTime.now();
     }
 }

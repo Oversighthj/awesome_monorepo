@@ -4,12 +4,13 @@ info:
   version: 1.0.0
   description: |
     Unified backend for Pilot-App (Spring Boot) + Flutter client.
+
 servers:
   - url: http://localhost:8080/api
     description: Local dev
 
 paths:
-  ## ────────────────  Users  ────────────────
+  ## ─────────────── Users ───────────────
   /users:
     get:
       summary: List all users
@@ -42,7 +43,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserDTO'
 
-  ## ───────────  Transport (existing) ───────────
+  ## ──────────── Transport ──────────────
   /transport/book:
     post:
       summary: Book a transport ride
@@ -61,7 +62,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TransportBookingDTO'
 
-  ## ─────────────  NEW: Booking  ─────────────
+  ## ───────────── Booking ───────────────
   /bookings:
     post:
       summary: Create a new booking (workspace, apartment, etc.)
@@ -79,9 +80,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BookingDTO'
-
     get:
-      summary: List bookings (optional filters)
+      summary: List bookings
       operationId: listBookings
       parameters:
         - name: userId
@@ -122,7 +122,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BookingDTO'
 
-  ## ─────────────  NEW: Payment  ─────────────
+  ## ───────────── Payment ───────────────
   /payments/checkout:
     post:
       summary: Initiate payment session (Stripe / PayPal)
@@ -143,6 +143,7 @@ paths:
 
 components:
   schemas:
+
     ## ─────────── Existing DTOs ───────────
     UserDTO:
       type: object
@@ -175,7 +176,7 @@ components:
           format: double
       required: [userId, pickupAddress, dropoffAddress, scheduledAt, price]
 
-    ## ─────────── NEW: Booking & Payment DTOs ───────────
+    ## ─────────── Booking & Payment DTOs ───────────
     BookingDTO:
       type: object
       properties:
@@ -204,6 +205,16 @@ components:
           example: 199.99
         status:
           $ref: '#/components/schemas/BookingStatus'
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          example: "2025-05-01T12:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          example: "2025-05-01T12:00:00Z"
       required:
         - userId
         - resourceId
@@ -213,7 +224,7 @@ components:
 
     BookingStatus:
       type: string
-      enum: [PENDING, CONFIRMED, CANCELLED, PAID]
+      enum: [PENDING, CONFIRMED, CANCELLED, PAID, EXPIRED]
 
     PaymentRequestDTO:
       type: object
