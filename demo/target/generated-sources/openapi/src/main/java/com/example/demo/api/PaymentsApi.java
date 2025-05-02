@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-02T11:01:44.032233944+08:00[Asia/Kuala_Lumpur]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-02T13:33:36.045281072+08:00[Asia/Kuala_Lumpur]")
 @Validated
 @Tag(name = "payments", description = "the payments API")
 public interface PaymentsApi {

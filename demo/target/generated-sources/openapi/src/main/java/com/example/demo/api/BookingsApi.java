@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-02T11:01:44.032233944+08:00[Asia/Kuala_Lumpur]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-02T13:33:36.045281072+08:00[Asia/Kuala_Lumpur]")
 @Validated
 @Tag(name = "bookings", description = "the bookings API")
 public interface BookingsApi {
@@ -69,7 +69,7 @@ public interface BookingsApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"resourceId\" : \"ROOM-A1\", \"totalPrice\" : 199.99, \"startTime\" : \"2025-05-15T09:00:00Z\", \"id\" : 42, \"endTime\" : \"2025-05-15T17:00:00Z\", \"userId\" : 1 }";
+                    String exampleString = "{ \"createdAt\" : \"2025-05-01T12:00:00Z\", \"resourceId\" : \"ROOM-A1\", \"totalPrice\" : 199.99, \"startTime\" : \"2025-05-15T09:00:00Z\", \"id\" : 42, \"endTime\" : \"2025-05-15T17:00:00Z\", \"userId\" : 1, \"updatedAt\" : \"2025-05-01T12:00:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -106,7 +106,7 @@ public interface BookingsApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"resourceId\" : \"ROOM-A1\", \"totalPrice\" : 199.99, \"startTime\" : \"2025-05-15T09:00:00Z\", \"id\" : 42, \"endTime\" : \"2025-05-15T17:00:00Z\", \"userId\" : 1 }";
+                    String exampleString = "{ \"createdAt\" : \"2025-05-01T12:00:00Z\", \"resourceId\" : \"ROOM-A1\", \"totalPrice\" : 199.99, \"startTime\" : \"2025-05-15T09:00:00Z\", \"id\" : 42, \"endTime\" : \"2025-05-15T17:00:00Z\", \"userId\" : 1, \"updatedAt\" : \"2025-05-01T12:00:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -118,7 +118,7 @@ public interface BookingsApi {
 
 
     /**
-     * GET /bookings : List bookings (optional filters)
+     * GET /bookings : List bookings
      *
      * @param userId  (optional)
      * @param status  (optional)
@@ -126,7 +126,7 @@ public interface BookingsApi {
      */
     @Operation(
         operationId = "listBookings",
-        summary = "List bookings (optional filters)",
+        summary = "List bookings",
         responses = {
             @ApiResponse(responseCode = "200", description = "List of bookings", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BookingDTO.class)))
@@ -145,7 +145,7 @@ public interface BookingsApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"resourceId\" : \"ROOM-A1\", \"totalPrice\" : 199.99, \"startTime\" : \"2025-05-15T09:00:00Z\", \"id\" : 42, \"endTime\" : \"2025-05-15T17:00:00Z\", \"userId\" : 1 }, { \"resourceId\" : \"ROOM-A1\", \"totalPrice\" : 199.99, \"startTime\" : \"2025-05-15T09:00:00Z\", \"id\" : 42, \"endTime\" : \"2025-05-15T17:00:00Z\", \"userId\" : 1 } ]";
+                    String exampleString = "[ { \"createdAt\" : \"2025-05-01T12:00:00Z\", \"resourceId\" : \"ROOM-A1\", \"totalPrice\" : 199.99, \"startTime\" : \"2025-05-15T09:00:00Z\", \"id\" : 42, \"endTime\" : \"2025-05-15T17:00:00Z\", \"userId\" : 1, \"updatedAt\" : \"2025-05-01T12:00:00Z\" }, { \"createdAt\" : \"2025-05-01T12:00:00Z\", \"resourceId\" : \"ROOM-A1\", \"totalPrice\" : 199.99, \"startTime\" : \"2025-05-15T09:00:00Z\", \"id\" : 42, \"endTime\" : \"2025-05-15T17:00:00Z\", \"userId\" : 1, \"updatedAt\" : \"2025-05-01T12:00:00Z\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

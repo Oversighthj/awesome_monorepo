@@ -22,7 +22,7 @@ import jakarta.annotation.Generated;
  * BookingDTO
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-02T11:01:44.032233944+08:00[Asia/Kuala_Lumpur]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-02T13:33:36.045281072+08:00[Asia/Kuala_Lumpur]")
 public class BookingDTO {
 
   private Long id;
@@ -40,6 +40,12 @@ public class BookingDTO {
   private Double totalPrice;
 
   private BookingStatus status;
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime createdAt;
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime updatedAt;
 
   /**
    * Default constructor
@@ -201,6 +207,46 @@ public class BookingDTO {
     this.status = status;
   }
 
+  public BookingDTO createdAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
+    return this;
+  }
+
+  /**
+   * Get createdAt
+   * @return createdAt
+  */
+  @Valid 
+  @Schema(name = "createdAt", accessMode = Schema.AccessMode.READ_ONLY, example = "2025-05-01T12:00Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("createdAt")
+  public OffsetDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public BookingDTO updatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+    return this;
+  }
+
+  /**
+   * Get updatedAt
+   * @return updatedAt
+  */
+  @Valid 
+  @Schema(name = "updatedAt", accessMode = Schema.AccessMode.READ_ONLY, example = "2025-05-01T12:00Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("updatedAt")
+  public OffsetDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -216,12 +262,14 @@ public class BookingDTO {
         Objects.equals(this.startTime, bookingDTO.startTime) &&
         Objects.equals(this.endTime, bookingDTO.endTime) &&
         Objects.equals(this.totalPrice, bookingDTO.totalPrice) &&
-        Objects.equals(this.status, bookingDTO.status);
+        Objects.equals(this.status, bookingDTO.status) &&
+        Objects.equals(this.createdAt, bookingDTO.createdAt) &&
+        Objects.equals(this.updatedAt, bookingDTO.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userId, resourceId, startTime, endTime, totalPrice, status);
+    return Objects.hash(id, userId, resourceId, startTime, endTime, totalPrice, status, createdAt, updatedAt);
   }
 
   @Override
@@ -235,6 +283,8 @@ public class BookingDTO {
     sb.append("    endTime: ").append(toIndentedString(endTime)).append("\n");
     sb.append("    totalPrice: ").append(toIndentedString(totalPrice)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
+    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

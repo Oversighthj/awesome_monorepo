@@ -88,7 +88,7 @@ paths:
                   $ref: '#/components/schemas/BookingDTO'
                 type: array
           description: List of bookings
-      summary: List bookings (optional filters)
+      summary: List bookings
       x-accepts: application/json
     post:
       operationId: createBooking
@@ -198,6 +198,7 @@ components:
       type: object
     BookingDTO:
       example:
+        createdAt: 2025-05-01T12:00:00Z
         resourceId: ROOM-A1
         totalPrice: 199.99
         startTime: 2025-05-15T09:00:00Z
@@ -205,6 +206,7 @@ components:
         endTime: 2025-05-15T17:00:00Z
         userId: 1
         status: null
+        updatedAt: 2025-05-01T12:00:00Z
       properties:
         id:
           example: 42
@@ -232,6 +234,16 @@ components:
           type: number
         status:
           $ref: '#/components/schemas/BookingStatus'
+        createdAt:
+          example: 2025-05-01T12:00:00Z
+          format: date-time
+          readOnly: true
+          type: string
+        updatedAt:
+          example: 2025-05-01T12:00:00Z
+          format: date-time
+          readOnly: true
+          type: string
       required:
       - endTime
       - resourceId
@@ -245,6 +257,7 @@ components:
       - CONFIRMED
       - CANCELLED
       - PAID
+      - EXPIRED
       type: string
     PaymentRequestDTO:
       example:
