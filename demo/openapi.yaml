@@ -1,21 +1,22 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
-  title: Demo API
-  version: 0.0.1
-  description: التعريف الموحد لواجهة برمجة التطبيقات
-
+  title: Pilot-App API
+  version: 1.0.0
+  description: |
+    Unified backend for Pilot-App (Spring Boot) + Flutter client.
 servers:
-  - url: http://localhost:8080
-    description: Local server
+  - url: http://localhost:8080/api
+    description: Local dev
 
 paths:
+  ## ────────────────  Users  ────────────────
   /users:
     get:
-      summary: استرجاع جميع المستخدمين
-      operationId: getUsers
+      summary: List all users
+      operationId: listUsers
       responses:
         '200':
-          description: قائمة المستخدمين
+          description: OK
           content:
             application/json:
               schema:
@@ -23,34 +24,28 @@ paths:
                 items:
                   $ref: '#/components/schemas/UserDTO'
 
-    post:
-      summary: إنشاء مستخدم جديد
-      operationId: createUser
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserDTO'
-            example:
-              id: 1
-              name: "Hector Jackson"
-              email: "hector@example.com"
+  /users/{id}:
+    get:
+      summary: Get user by id
+      operationId: getUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
       responses:
-        '201':
-          description: المستخدم الذي تم إنشاؤه
+        '200':
+          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDTO'
-              example:
-                id: 1
-                name: "Hector Jackson"
-                email: "hector@example.com"
 
+  ## ───────────  Transport (existing) ───────────
   /transport/book:
     post:
-      summary: حجز رحلة
+      summary: Book a transport ride
       operationId: bookTransport
       requestBody:
         required: true
@@ -58,82 +53,194 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TransportBookingDTO'
-            example:
-              flightId: "FL123"
-              userId: "1"
-              seatCount: 2
       responses:
-        '200':
-          description: تأكيد الحجز
+        '201':
+          description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BookingResponseDTO'
-              example:
-                bookingId: 1001
-                flightId: "FL123"
-                userId: "1"
-                seatCount: 2
-                status: "CONFIRMED"
-                bookingTime: "2025-04-30T15:30:00Z"
+                $ref: '#/components/schemas/TransportBookingDTO'
+
+  ## ─────────────  NEW: Booking  ─────────────
+  /bookings:
+    post:
+      summary: Create a new booking (workspace, apartment, etc.)
+      operationId: createBooking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingDTO'
+      responses:
+        '201':
+          description: Booking created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDTO'
+
+    get:
+      summary: List bookings (optional filters)
+      operationId: listBookings
+      parameters:
+        - name: userId
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/BookingStatus'
+      responses:
+        '200':
+          description: List of bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingDTO'
+
+  /bookings/{bookingId}:
+    get:
+      summary: Get booking details
+      operationId: getBooking
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Booking details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDTO'
+
+  ## ─────────────  NEW: Payment  ─────────────
+  /payments/checkout:
+    post:
+      summary: Initiate payment session (Stripe / PayPal)
+      operationId: initiatePayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequestDTO'
+      responses:
+        '200':
+          description: Checkout session info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponseDTO'
 
 components:
   schemas:
-
+    ## ─────────── Existing DTOs ───────────
     UserDTO:
       type: object
       properties:
         id:
           type: integer
-          format: int64        # ← Long
-          example: 1
-        name:
-          type: string
-          example: "Hector Jackson"
         email:
           type: string
           format: email
-          example: "hector@example.com"
+        fullName:
+          type: string
+      required: [email, fullName]
 
     TransportBookingDTO:
       type: object
       properties:
-        flightId:
-          type: string
-          example: "FL123"
-        userId:
-          type: string
-          example: "1"
-        seatCount:
+        id:
           type: integer
-          example: 2
-      required:
-        - flightId
-        - userId
-        - seatCount
+        userId:
+          type: integer
+        pickupAddress:
+          type: string
+        dropoffAddress:
+          type: string
+        scheduledAt:
+          type: string
+          format: date-time
+        price:
+          type: number
+          format: double
+      required: [userId, pickupAddress, dropoffAddress, scheduledAt, price]
 
-    BookingResponseDTO:
+    ## ─────────── NEW: Booking & Payment DTOs ───────────
+    BookingDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 42
+        userId:
+          type: integer
+          example: 1
+        resourceId:
+          type: string
+          description: Identifier of the booked asset (room, apartment, vehicle …)
+          example: "ROOM-A1"
+        startTime:
+          type: string
+          format: date-time
+          example: "2025-05-15T09:00:00Z"
+        endTime:
+          type: string
+          format: date-time
+          example: "2025-05-15T17:00:00Z"
+        totalPrice:
+          type: number
+          format: double
+          example: 199.99
+        status:
+          $ref: '#/components/schemas/BookingStatus'
+      required:
+        - userId
+        - resourceId
+        - startTime
+        - endTime
+        - totalPrice
+
+    BookingStatus:
+      type: string
+      enum: [PENDING, CONFIRMED, CANCELLED, PAID]
+
+    PaymentRequestDTO:
       type: object
       properties:
         bookingId:
           type: integer
-          format: int64        # ← Long لتطابق الاختبارات والكيان
-          example: 1001
-        flightId:
+          format: int64
+        amount:
+          type: number
+          format: double
+        currency:
           type: string
-          example: "FL123"
-        userId:
+          example: "MYR"
+        provider:
           type: string
-          example: "1"
-        seatCount:
-          type: integer
-          example: 2
-        status:
+          enum: [STRIPE, PAYPAL]
+      required: [bookingId, amount, currency, provider]
+
+    PaymentResponseDTO:
+      type: object
+      properties:
+        checkoutUrl:
           type: string
-          example: "CONFIRMED"
-        # حقل زمني بصيغة ISO-8601 وسيولَّد كـ OffsetDateTime
-        bookingTime:
+          format: uri
+        expiresAt:
           type: string
           format: date-time
-          x-java-type: java.time.OffsetDateTime
-          example: "2025-04-30T15:30:00Z"
+        providerSessionId:
+          type: string
+      required: [checkoutUrl, providerSessionId]
