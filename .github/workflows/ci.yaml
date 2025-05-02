@@ -37,15 +37,16 @@ jobs:
       - name: 🏗️ Generate OpenAPI sources & compile
         working-directory: demo
         run: |
-          ./mvnw -q clean generate-sources      # يشغّل openapi-generator داخل phase generate-sources
-          ./mvnw -q test-compile                # يترجم كود الاختبار (ويُضمّن المصادر المولَّدة)
+          ./mvnw -q clean generate-sources      # يشغّل openapi-generator
+          ./mvnw -q test-compile                # يترجم كود الاختبار
 
-      # تحقق من أن الكود المولَّد ملتزم
+      # تحقق من أن الكود المولَّد ملتزم (نتجاهل annotations/**)
       - name: 🔒 Verify backend generated sources are committed
         run: |
-          if [[ -n "$(git status --porcelain demo)" ]]; then
+          DIFF=$(git status --porcelain demo | grep -v 'target/generated-sources/annotations/')
+          if [[ -n "$DIFF" ]]; then
             echo "::error::Backend generated code is out of date. Run 'mvn generate-sources' and commit changes."
-            git status --porcelain
+            echo "$DIFF"
             exit 1
           fi
 
