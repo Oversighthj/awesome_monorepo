@@ -41,12 +41,11 @@ jobs:
           ./mvnw -q test-compile                # يترجم كود الاختبار
 
       # تحقق من أن الكود المولَّد ملتزم (نتجاهل annotations/**)
-      - name: 🔒 Verify backend generated sources are committed
+      - name: 🔒 Verify backend working tree is clean
         run: |
-          DIFF=$(git status --porcelain demo | grep -v 'target/generated-sources/annotations/')
-          if [[ -n "$DIFF" ]]; then
-            echo "::error::Backend generated code is out of date. Run 'mvn generate-sources' and commit changes."
-            echo "$DIFF"
+          if [[ -n "$(git status --porcelain demo)" ]]; then
+            echo "::error::Working tree not clean. Did you forget to commit code changes?"
+            git status --porcelain
             exit 1
           fi
 
