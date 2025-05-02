@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  * PaymentResponseDTO
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-02T14:14:32.978510261+08:00[Asia/Kuala_Lumpur]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-02T14:19:59.355651999+08:00[Asia/Kuala_Lumpur]")
 public class PaymentResponseDTO {
 
   private URI checkoutUrl;
