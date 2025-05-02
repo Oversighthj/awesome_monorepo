@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * UserDTO
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-02T13:33:36.045281072+08:00[Asia/Kuala_Lumpur]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-02T13:43:29.120986689+08:00[Asia/Kuala_Lumpur]")
 public class UserDTO {
 
   private Integer id;
