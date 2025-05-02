@@ -1,5 +1,13 @@
 HELP.md
 target/
+
+# ─────────────────────────────────────────────
+# Allow ONLY the OpenAPI generated sources
+# (everything else in target/ remains ignored)
+# ─────────────────────────────────────────────
+!/target/generated-sources/
+!/target/generated-sources/**
+
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
