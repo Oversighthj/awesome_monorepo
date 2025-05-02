@@ -1,0 +1,293 @@
+openapi: 3.0.3
+info:
+  description: |
+    Unified backend for Pilot-App (Spring Boot) + Flutter client.
+  title: Pilot-App API
+  version: 1.0.0
+servers:
+- description: Local dev
+  url: http://localhost:8080/api
+paths:
+  /users:
+    get:
+      operationId: listUsers
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+                type: array
+          description: OK
+      summary: List all users
+      x-accepts: application/json
+  /users/{id}:
+    get:
+      operationId: getUser
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+          description: OK
+      summary: Get user by id
+      x-accepts: application/json
+  /transport/book:
+    post:
+      operationId: bookTransport
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransportBookingDTO'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransportBookingDTO'
+          description: Created
+      summary: Book a transport ride
+      x-content-type: application/json
+      x-accepts: application/json
+  /bookings:
+    get:
+      operationId: listBookings
+      parameters:
+      - explode: true
+        in: query
+        name: userId
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          $ref: '#/components/schemas/BookingStatus'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BookingDTO'
+                type: array
+          description: List of bookings
+      summary: List bookings (optional filters)
+      x-accepts: application/json
+    post:
+      operationId: createBooking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingDTO'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDTO'
+          description: Booking created
+      summary: "Create a new booking (workspace, apartment, etc.)"
+      x-content-type: application/json
+      x-accepts: application/json
+  /bookings/{bookingId}:
+    get:
+      operationId: getBooking
+      parameters:
+      - explode: false
+        in: path
+        name: bookingId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDTO'
+          description: Booking details
+      summary: Get booking details
+      x-accepts: application/json
+  /payments/checkout:
+    post:
+      operationId: initiatePayment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequestDTO'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponseDTO'
+          description: Checkout session info
+      summary: Initiate payment session (Stripe / PayPal)
+      x-content-type: application/json
+      x-accepts: application/json
+components:
+  schemas:
+    UserDTO:
+      example:
+        fullName: fullName
+        id: 0
+        email: email
+      properties:
+        id:
+          type: integer
+        email:
+          format: email
+          type: string
+        fullName:
+          type: string
+      required:
+      - email
+      - fullName
+      type: object
+    TransportBookingDTO:
+      example:
+        dropoffAddress: dropoffAddress
+        pickupAddress: pickupAddress
+        price: 1.4658129805029452
+        id: 0
+        userId: 6
+        scheduledAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        pickupAddress:
+          type: string
+        dropoffAddress:
+          type: string
+        scheduledAt:
+          format: date-time
+          type: string
+        price:
+          format: double
+          type: number
+      required:
+      - dropoffAddress
+      - pickupAddress
+      - price
+      - scheduledAt
+      - userId
+      type: object
+    BookingDTO:
+      example:
+        resourceId: ROOM-A1
+        totalPrice: 199.99
+        startTime: 2025-05-15T09:00:00Z
+        id: 42
+        endTime: 2025-05-15T17:00:00Z
+        userId: 1
+        status: null
+      properties:
+        id:
+          example: 42
+          format: int64
+          type: integer
+        userId:
+          example: 1
+          type: integer
+        resourceId:
+          description: "Identifier of the booked asset (room, apartment, vehicle …\
+            )"
+          example: ROOM-A1
+          type: string
+        startTime:
+          example: 2025-05-15T09:00:00Z
+          format: date-time
+          type: string
+        endTime:
+          example: 2025-05-15T17:00:00Z
+          format: date-time
+          type: string
+        totalPrice:
+          example: 199.99
+          format: double
+          type: number
+        status:
+          $ref: '#/components/schemas/BookingStatus'
+      required:
+      - endTime
+      - resourceId
+      - startTime
+      - totalPrice
+      - userId
+      type: object
+    BookingStatus:
+      enum:
+      - PENDING
+      - CONFIRMED
+      - CANCELLED
+      - PAID
+      type: string
+    PaymentRequestDTO:
+      example:
+        amount: 6.027456183070403
+        provider: STRIPE
+        currency: MYR
+        bookingId: 0
+      properties:
+        bookingId:
+          format: int64
+          type: integer
+        amount:
+          format: double
+          type: number
+        currency:
+          example: MYR
+          type: string
+        provider:
+          enum:
+          - STRIPE
+          - PAYPAL
+          type: string
+      required:
+      - amount
+      - bookingId
+      - currency
+      - provider
+      type: object
+    PaymentResponseDTO:
+      example:
+        providerSessionId: providerSessionId
+        expiresAt: 2000-01-23T04:56:07.000+00:00
+        checkoutUrl: https://openapi-generator.tech
+      properties:
+        checkoutUrl:
+          format: uri
+          type: string
+        expiresAt:
+          format: date-time
+          type: string
+        providerSessionId:
+          type: string
+      required:
+      - checkoutUrl
+      - providerSessionId
+      type: object
