@@ -1,6 +1,7 @@
 include:
   - "demo/**"
   - "pilot_app/**"
+  - "config.yml"
 exclude:
   - "demo/target/generated-sources/**"
   - "pilot_app/**/*.g.dart"
