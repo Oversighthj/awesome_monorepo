@@ -293,7 +293,7 @@ with tempfile.NamedTemporaryFile("w", encoding="utf-8", delete=False) as tf:
     tf.write(patch_clean)
     tmp_patch = tf.name
 
-git_ok = _git_apply(tmp_patch, check=not do_apply)
+git_ok = _git_apply(tmp_patch, check=True)
 
 if not git_ok and do_apply:
     LOG.warning("%s git apply failed — trying fallbacks.", WARN)

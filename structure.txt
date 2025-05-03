@@ -3002,3 +3002,5 @@
     └── settings.json
 
 683 directories, 2318 files
+demo/hello.txt
+demo/hello.txt
