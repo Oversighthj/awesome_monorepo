@@ -1,0 +1,3 @@
+pyyaml>=6.0
+# optional colour output on Windows
+colorama>=0.4.0 ; platform_system=="Windows"
