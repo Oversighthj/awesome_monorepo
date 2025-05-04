@@ -190,7 +190,7 @@
         <executions>
           <execution>
             <id>generate-openapi</id>
-            <phase>generate-sources</phase>                           <!-- ← أضف هذا السطر -->
+            <!--phase>generate-sources</phase-->                           <!-- ← أضف هذا السطر -->
             <goals>
               <goal>generate</goal>
             </goals>
