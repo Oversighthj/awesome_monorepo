@@ -1,6 +1,8 @@
 include:
   - "demo/**"
   - "pilot_app/**"
+  - "demo/src/main/java/**"
+  - "demo/src/main/java/com/example/demo/entity/BookingEntity.java"
   - "config.yml"
 exclude:
   - "demo/target/generated-sources/**"

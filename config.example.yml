@@ -1,5 +1,7 @@
 include:
   - "demo/**"
+  - "demo/src/main/java/**"
+  - "demo/src/main/java/com/example/demo/entity/BookingEntity.java"
   - "pilot_app/**"
 exclude:
   - "demo/target/generated-sources/**"
