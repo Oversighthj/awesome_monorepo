@@ -3,7 +3,9 @@ package com.example.demo.entity;
 import com.example.demo.model.BookingStatus;
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.OffsetDateTime;
 
 @Entity
@@ -18,8 +20,8 @@ public class BookingEntity {
     @Column(nullable = false)
     private Long userId;
 
-    @Column(nullable = false, length = 255)
-    private String resourceId;          // الغرفة / السيارة / المكتب المحجوز
+    @Column(name = "resource_id", nullable = false)
+    private Long resourceId;          // الغرفة / السيارة / المكتب المحجوز
 
     // ─────────────── التوقيت ───────────────
     @Column(nullable = false)
@@ -29,19 +31,21 @@ public class BookingEntity {
     private OffsetDateTime endTime;
 
     // ─────────────── السعر والحالة ───────────────
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalPrice;
+    @Column(name = "total_price", nullable = false)
+    private Double totalPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private BookingStatus status = BookingStatus.PENDING;
 
     // ─────────────── طوابع زمنية تلقائية ───────────────
+    @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private OffsetDateTime createdAt = OffsetDateTime.now();
+    private OffsetDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(nullable = false)
-    private OffsetDateTime updatedAt = OffsetDateTime.now();
+    private OffsetDateTime updatedAt;
 
     // ─────────────── Getters / Setters ───────────────
 
@@ -59,10 +63,10 @@ public class BookingEntity {
         this.userId = userId;
     }
 
-    public String getResourceId() {
+    public Long getResourceId() {
         return resourceId;
     }
-    public void setResourceId(String resourceId) {
+    public void setResourceId(Long resourceId) {
         this.resourceId = resourceId;
     }
 
@@ -80,10 +84,10 @@ public class BookingEntity {
         this.endTime = endTime;
     }
 
-    public BigDecimal getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
-    public void setTotalPrice(BigDecimal totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -106,11 +110,5 @@ public class BookingEntity {
     }
     public void setUpdatedAt(OffsetDateTime updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    // ─────────────── lifecycle hooks لتحديث updatedAt ───────────────
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = OffsetDateTime.now();
     }
 }
