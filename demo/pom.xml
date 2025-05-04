@@ -110,6 +110,11 @@
       <artifactId>jakarta.validation-api</artifactId>
       <version>3.0.2</version>
     </dependency>
+    <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+      <version>2.1.0</version>
+    </dependency>
 
     <!-- Springdoc (Swagger UI) -->
     <dependency>
@@ -184,7 +189,11 @@
         <version>${openapi-generator.version}</version>
         <executions>
           <execution>
-            <goals><goal>generate</goal></goals>
+            <id>generate-openapi</id>
+            <phase>generate-sources</phase>                           <!-- ← أضف هذا السطر -->
+            <goals>
+              <goal>generate</goal>
+            </goals>
             <configuration>
               <inputSpec>${project.basedir}/openapi.yaml</inputSpec>
               <generatorName>spring</generatorName>
@@ -192,9 +201,9 @@
               <modelPackage>com.example.demo.model</modelPackage>
               <output>${project.build.directory}/generated-sources/openapi</output>
               <configOptions>
+                <sourceFolder>src/main/java</sourceFolder>
                 <useSpringBoot3>true</useSpringBoot3>
                 <useJakartaEe>true</useJakartaEe>
-                <!-- لا نولّد Main إضافي -->
                 <skipMainApplication>true</skipMainApplication>
               </configOptions>
             </configuration>

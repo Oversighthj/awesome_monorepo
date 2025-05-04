@@ -1,0 +1,38 @@
+diff a/demo/src/main/java/com/example/demo/entity/BookingEntity.java b/demo/src/main/java/com/example/demo/entity/BookingEntity.java	(rejected hunks)
+@@ -3,6 +3,9 @@ package com.example.demo.entity;
+ import com.example.demo.model.BookingStatus;
+ import jakarta.persistence.*;
+ 
++import org.hibernate.annotations.CreationTimestamp;
++import org.hibernate.annotations.UpdateTimestamp;
++
+ import java.math.BigDecimal;
+ import java.time.OffsetDateTime;
+ 
+@@ -37,11 +40,13 @@ public class BookingEntity {
+     private BookingStatus status = BookingStatus.PENDING;
+ 
+     // ─────────────── طوابع زمنية تلقائية ───────────────
++    @CreationTimestamp
+     @Column(nullable = false, updatable = false)
+-    private OffsetDateTime createdAt = OffsetDateTime.now();
++    private OffsetDateTime createdAt;
+ 
++    @UpdateTimestamp
+     @Column(nullable = false)
+-    private OffsetDateTime updatedAt = OffsetDateTime.now();
++    private OffsetDateTime updatedAt;
+ 
+     // ─────────────── Getters / Setters ───────────────
+ 
+@@ -107,10 +112,4 @@ public class BookingEntity {
+     public void setUpdatedAt(OffsetDateTime updatedAt) {
+         this.updatedAt = updatedAt;
+     }
+-
+-    // ─────────────── lifecycle hooks لتحديث updatedAt ───────────────
+-    @PreUpdate
+-    public void preUpdate() {
+-        this.updatedAt = OffsetDateTime.now();
+-    }
+ }
