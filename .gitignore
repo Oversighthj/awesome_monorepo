@@ -4,7 +4,7 @@
 # احجب كل الملفات داخل أي target/ في المشروع، لكن دع المجلد نفسه مرئياً
 **/target/*
 !**/target/                 # نسمح برؤية المجلدات فقط، لا الملفات
-
+/target/\n**/generated-sources/
 !.mvn/wrapper/maven-wrapper.jar
 
 # NetBeans

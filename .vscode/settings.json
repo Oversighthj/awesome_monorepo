@@ -1,4 +1,26 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive"
+  // إعدادات Java
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.configuration.updateBuildConfiguration": "interactive",
+
+  // أخفِ المجلدات المولَّدة من مستكشف الملفات ومن البحث
+  "files.exclude": {
+    // "**/demo/target/generated-sources/openapi/**": true,
+    "**/pilot_app/android/**": true,
+    // "**/target/generated-sources/**": true
+  },
+  "search.exclude": {
+    // "**/demo/target/generated-sources/openapi/**": true,
+    "**/pilot_app/android/**": true,
+    // "**/target/generated-sources/**": true
+  },
+
+  // قل لـ Java LSP أن يستعمل فقط مجلدات src كمصادر جافا
+  "java.project.sourcePaths": [
+    "demo/src/main/java",
+    "demo/src/test/java"
+  ]
+
+  // إذا حابّ يظهر كود الـ OpenAPI المولّد في go-to-definition:
+  // "demo/target/generated-sources/openapi/src/main/java"
 }

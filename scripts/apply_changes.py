@@ -150,7 +150,7 @@ include_patterns: List[str] = raw_cfg.get("include", ["**/*"])
 exclude_patterns: List[str] = raw_cfg.get("exclude", [])
 backup_dir = REPO_ROOT / raw_cfg.get("backup_dir", ".backups")
 retention_days: int = int(raw_cfg.get("backup_retention_days", 7))
-generated_openapi = Path(raw_cfg.get("generated_openapi", "demo/openapi.yaml"))
+generated_openapi = Path(raw_cfg.get("generated_openapi", "demo/src/main/resources/openapi.yaml"))
 
 # always exclude backup directory (handle nested paths)
 rel_backup = backup_dir.relative_to(REPO_ROOT)
