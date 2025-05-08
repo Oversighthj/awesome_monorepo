@@ -203,8 +203,6 @@
               <configOptions>
                 <interfaceOnly>true</interfaceOnly>
                 <skipDefaultInterface>true</skipDefaultInterface>
-                <generateApiTests>false</generateApiTests>
-                <generateModelTests>false</generateModelTests>
                 <sourceFolder>src/main/java</sourceFolder>
                 <useSpringBoot3>true</useSpringBoot3>
                 <useJakartaEe>true</useJakartaEe>
@@ -212,6 +210,8 @@
                 <requestMappingMode>controller</requestMappingMode>
                 <useTags>true</useTags>
               </configOptions>
+                <generateApiTests>false</generateApiTests>
+                <generateModelTests>false</generateModelTests>
             </configuration>
           </execution>
         </executions>
