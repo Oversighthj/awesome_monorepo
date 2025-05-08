@@ -1,0 +1,6 @@
+-- يضيف created_at و updated_at إن لم يكونا موجودَيْن
+ALTER TABLE bookings
+    ADD COLUMN IF NOT EXISTS created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE bookings
+    ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;

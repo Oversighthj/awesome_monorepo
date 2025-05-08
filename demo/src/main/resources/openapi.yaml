@@ -105,6 +105,7 @@ paths:
           required: false
           schema:
             type: integer
+            format: int64
         - name: status
           in: query
           required: false
@@ -131,6 +132,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64        # ← هذه السطر هو الإضافة الوحيدة
       responses:
         '200':
           description: Booking details
@@ -138,7 +140,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BookingDTO'
-
   ## ───────────── Payment ───────────────
   /payments/checkout:
     post:
@@ -204,11 +205,13 @@ components:
           example: 42
         userId:
           type: integer
+          format: int64
           example: 1
         resourceId:
-          type: string
-          description: Identifier of the booked asset (room, apartment, vehicle …)
-          example: "ROOM-A1"
+          type: integer
+          format: int64
+          description: Numeric identifier of the booked asset (room, apartment, vehicle …)
+          example: 1001
         startTime:
           type: string
           format: date-time
