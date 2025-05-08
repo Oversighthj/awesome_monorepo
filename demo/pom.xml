@@ -182,7 +182,7 @@
         </configuration>
       </plugin>
 
-      <!-- OpenAPI Generator -->
+      <!-- OpenAPI Generator (interfaces + models only) -->
       <plugin>
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -190,28 +190,32 @@
         <executions>
           <execution>
             <id>generate-openapi</id>
-            <!--phase>generate-sources</phase-->                           <!-- ← أضف هذا السطر -->
+            <phase>generate-sources</phase>
             <goals>
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>${project.basedir}/openapi.yaml</inputSpec>
+              <inputSpec>${project.basedir}/src/main/resources/openapi.yaml</inputSpec>
               <generatorName>spring</generatorName>
               <apiPackage>com.example.demo.api</apiPackage>
               <modelPackage>com.example.demo.model</modelPackage>
               <output>${project.build.directory}/generated-sources/openapi</output>
               <configOptions>
+                <interfaceOnly>true</interfaceOnly>
+                <skipDefaultInterface>true</skipDefaultInterface>
                 <sourceFolder>src/main/java</sourceFolder>
                 <useSpringBoot3>true</useSpringBoot3>
                 <useJakartaEe>true</useJakartaEe>
                 <skipMainApplication>true</skipMainApplication>
+                <requestMappingMode>controller</requestMappingMode>
+                <useTags>true</useTags>
               </configOptions>
             </configuration>
           </execution>
         </executions>
       </plugin>
 
-      <!-- Build-Helper: add generated OpenAPI sources to compilation -->
+      <!-- Build Helper: add generated sources to classpath -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -223,16 +227,14 @@
             <goals><goal>add-source</goal></goals>
             <configuration>
               <sources>
-                <source>
-                  ${project.build.directory}/generated-sources/openapi/src/main/java
-                </source>
+                <source>${project.build.directory}/generated-sources/openapi/src/main/java</source>
               </sources>
             </configuration>
           </execution>
         </executions>
       </plugin>
 
-      <!-- Spring-Boot Maven Plugin -->
+      <!-- Spring Boot Maven Plugin -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

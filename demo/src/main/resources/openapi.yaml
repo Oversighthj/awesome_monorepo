@@ -9,10 +9,22 @@ servers:
   - url: http://localhost:8080/api
     description: Local dev
 
+# 1) تعريف الوسوم
+tags:
+  - name: users
+    description: عمليات إنشاء واستعلام المستخدمين
+  - name: transport
+    description: عمليات حجز النقل
+  - name: bookings
+    description: عمليات الحجز العامة (workspace, apartment, etc.)
+  - name: payments
+    description: عمليات الدفع (Stripe/PayPal)
+
 paths:
   ## ─────────────── Users ───────────────
   /users:
     get:
+      tags: [users]
       summary: List all users
       operationId: listUsers
       responses:
@@ -27,6 +39,7 @@ paths:
 
   /users/{id}:
     get:
+      tags: [users]
       summary: Get user by id
       operationId: getUser
       parameters:
@@ -46,6 +59,7 @@ paths:
   ## ──────────── Transport ──────────────
   /transport/book:
     post:
+      tags: [transport]
       summary: Book a transport ride
       operationId: bookTransport
       requestBody:
@@ -65,6 +79,7 @@ paths:
   ## ───────────── Booking ───────────────
   /bookings:
     post:
+      tags: [bookings]
       summary: Create a new booking (workspace, apartment, etc.)
       operationId: createBooking
       requestBody:
@@ -81,6 +96,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BookingDTO'
     get:
+      tags: [bookings]
       summary: List bookings
       operationId: listBookings
       parameters:
@@ -106,6 +122,7 @@ paths:
 
   /bookings/{bookingId}:
     get:
+      tags: [bookings]  
       summary: Get booking details
       operationId: getBooking
       parameters:
@@ -125,6 +142,7 @@ paths:
   ## ───────────── Payment ───────────────
   /payments/checkout:
     post:
+      tags: [payments]
       summary: Initiate payment session (Stripe / PayPal)
       operationId: initiatePayment
       requestBody:

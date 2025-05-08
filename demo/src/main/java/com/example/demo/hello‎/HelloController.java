@@ -1,4 +1,4 @@
-package com.example.demo;  // ← ضعه نفس اسم الحزمة
+package com.example.demo.hello‎;  // ← ضعه نفس اسم الحزمة
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
