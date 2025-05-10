@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
+concurrency:
+  group: ci-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 # ───────────────────────────── Backend ─────────────────────────────
 jobs:
   backend:
@@ -13,11 +17,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout
       - name: ⬇️ Checkout
         uses: actions/checkout@v3
 
-      # JDK 17
       - name: ☕ Set up Temurin JDK 17
         uses: actions/setup-java@v3
         with:
@@ -25,22 +27,12 @@ jobs:
           java-version: 17
           cache: maven
 
-      # Cache Maven repo
-      - name: ♻️ Cache Maven repository
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2-
-
-      # Generate OpenAPI sources (via phase) + compile tests
       - name: 🏗️ Generate OpenAPI sources & compile
         working-directory: demo
         run: |
-          ./mvnw -q clean generate-sources      # يشغّل openapi-generator
-          ./mvnw -q test-compile                # يترجم كود الاختبار
+          ./mvnw -q clean generate-sources
+          ./mvnw -q test-compile
 
-      # تحقق من أن الكود المولَّد ملتزم (نتجاهل annotations/**)
       - name: 🔒 Verify backend working tree is clean
         run: |
           if [[ -n "$(git status --porcelain demo)" ]]; then
@@ -49,29 +41,39 @@ jobs:
             exit 1
           fi
 
-      # اختبارات JUnit
+      - name: 🧹 Spotless check
+        working-directory: demo
+        run: ./mvnw spotless:check
+
       - name: ✅ Run backend tests
         working-directory: demo
         run: ./mvnw -q test
+
+      - name: 📊 Generate Jacoco coverage report
+        working-directory: demo
+        run: ./mvnw jacoco:report
+
+      - name: 📎 Upload Jacoco HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: demo/target/site/jacoco/
 
 # ───────────────────────────── Flutter ─────────────────────────────
   flutter:
     name: Build & Test Flutter
     runs-on: ubuntu-latest
-    needs: backend        # لا يبدأ إلا بعد نجاح الـ backend
+    needs: backend
 
     steps:
-      # Checkout (ثانياً لأن كل Job بيئة نظيفة)
       - name: ⬇️ Checkout
         uses: actions/checkout@v3
 
-      # Flutter SDK
       - name: 🐦 Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
 
-      # Cache pub
       - name: ♻️ Cache Flutter pub packages
         uses: actions/cache@v3
         with:
@@ -79,17 +81,14 @@ jobs:
           key: ${{ runner.os }}-pub-${{ hashFiles('pilot_app/pubspec.lock') }}
           restore-keys: ${{ runner.os }}-pub-
 
-      # Pub get
       - name: 📦 Install dependencies
         working-directory: pilot_app
         run: flutter pub get
 
-      # build_runner code-gen
       - name: 🔨 Generate code (build_runner)
         working-directory: pilot_app
         run: flutter pub run build_runner build --delete-conflicting-outputs
 
-      # تحقّق من التزام الملفات المولَّدة
       - name: 🔒 Verify flutter generated sources are committed
         run: |
           if [[ -n "$(git status --porcelain pilot_app)" ]]; then
@@ -98,12 +97,22 @@ jobs:
             exit 1
           fi
 
-      # تحليل ثابت
       - name: 🔍 Static analysis
         working-directory: pilot_app
         run: flutter analyze --fatal-warnings
 
-      # اختبارات Flutter
       - name: ✅ Run Flutter tests
         working-directory: pilot_app
-        run: flutter test
+        run: flutter test --coverage
+
+      - name: 📊 Generate Flutter coverage HTML
+        working-directory: pilot_app
+        run: |
+          sudo apt-get update && sudo apt-get install -y lcov
+          genhtml coverage/lcov.info -o coverage/html
+
+      - name: 📎 Upload Flutter HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-coverage-report
+          path: pilot_app/coverage/html/
