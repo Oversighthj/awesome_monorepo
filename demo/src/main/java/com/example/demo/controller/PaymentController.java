@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")          // يتوافق مع base-path في openapi.yaml
+@RequestMapping("/api") // يتوافق مع base-path في openapi.yaml
 @RequiredArgsConstructor
 public class PaymentController implements PaymentsApi {
 
-    private final PaymentGateway paymentGateway;   // يُحقن StripeStubService
+  private final PaymentGateway paymentGateway; // يُحقن StripeStubService
 
-    /** POST /payments/checkout */
-    @Override
-    public ResponseEntity<PaymentResponseDTO> initiatePayment(PaymentRequestDTO body) {
-        PaymentResponseDTO resp = paymentGateway.createCheckout(body);
-        return ResponseEntity.ok(resp);
-    }
+  /** POST /payments/checkout */
+  @Override
+  public ResponseEntity<PaymentResponseDTO> initiatePayment(PaymentRequestDTO body) {
+    PaymentResponseDTO resp = paymentGateway.createCheckout(body);
+    return ResponseEntity.ok(resp);
+  }
 }
