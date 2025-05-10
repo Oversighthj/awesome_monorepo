@@ -9,14 +9,14 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface BookingMapper {
 
-    BookingMapper INSTANCE = Mappers.getMapper(BookingMapper.class);
+  BookingMapper INSTANCE = Mappers.getMapper(BookingMapper.class);
 
-    // Entity → DTO
-    BookingDTO toDto(BookingEntity entity);
+  // Entity → DTO
+  BookingDTO toDto(BookingEntity entity);
 
-    // DTO → Entity (نتجاهل الحقول التي يُولّدها السيرفر)
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    BookingEntity toEntity(BookingDTO dto);
+  // DTO → Entity (نتجاهل الحقول التي يُولّدها السيرفر)
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "createdAt", ignore = true)
+  @Mapping(target = "updatedAt", ignore = true)
+  BookingEntity toEntity(BookingDTO dto);
 }

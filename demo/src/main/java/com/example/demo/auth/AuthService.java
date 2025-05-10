@@ -10,28 +10,27 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtUtils jwtUtils;
+  @Autowired private AuthenticationManager authenticationManager;
+  @Autowired private JwtUtils jwtUtils;
 
-    public LoginResponse login(LoginRequest loginRequest) {
-        // Perform authentication
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+  public LoginResponse login(LoginRequest loginRequest) {
+    // Perform authentication
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(), loginRequest.getPassword()));
+    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Generate JWT token for the authenticated user
-        String jwt = jwtUtils.generateJwtToken(authentication);
+    // Generate JWT token for the authenticated user
+    String jwt = jwtUtils.generateJwtToken(authentication);
 
-        // Get user details to retrieve username and roles
-        org.springframework.security.core.userdetails.UserDetails userDetails =
-            (org.springframework.security.core.userdetails.UserDetails) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                                       .map(authority -> authority.getAuthority())
-                                       .toList();
+    // Get user details to retrieve username and roles
+    org.springframework.security.core.userdetails.UserDetails userDetails =
+        (org.springframework.security.core.userdetails.UserDetails) authentication.getPrincipal();
+    List<String> roles =
+        userDetails.getAuthorities().stream().map(authority -> authority.getAuthority()).toList();
 
-        // Return a response containing the JWT and user information
-        return new LoginResponse(jwt, userDetails.getUsername(), roles);
-    }
+    // Return a response containing the JWT and user information
+    return new LoginResponse(jwt, userDetails.getUsername(), roles);
+  }
 }
