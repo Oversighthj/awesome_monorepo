@@ -53,12 +53,6 @@ jobs:
         working-directory: demo
         run: ./mvnw jacoco:report
 
-      - name: 📎 Upload Jacoco HTML report
-        uses: actions/upload-artifact@v2
-        with:
-          name: jacoco-report
-          path: demo/target/site/jacoco/
-
 # ───────────────────────────── Flutter ─────────────────────────────
   flutter:
     name: Build & Test Flutter
@@ -111,8 +105,3 @@ jobs:
           sudo apt-get update && sudo apt-get install -y lcov
           genhtml coverage/lcov.info -o coverage/html
 
-      - name: 📎 Upload Flutter HTML report
-        uses: actions/upload-artifact@v2
-        with:
-          name: flutter-coverage-report
-          path: pilot_app/coverage/html/
