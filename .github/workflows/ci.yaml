@@ -112,7 +112,7 @@ jobs:
           genhtml coverage/lcov.info -o coverage/html
 
       - name: 📎 Upload Flutter HTML report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: flutter-coverage-report
           path: pilot_app/coverage/html/
