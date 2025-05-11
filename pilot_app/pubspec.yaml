@@ -17,6 +17,8 @@ dependencies:
   get_it: ^7.2.0
   connectivity_plus: ^3.0.2
   go_router: ^7.0.1
+  openapi:
+    path: lib/generated
 
 dev_dependencies:
   flutter_test:
