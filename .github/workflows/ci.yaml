@@ -85,11 +85,13 @@ jobs:
 
       - name: 🔒 Verify flutter generated sources are committed
         run: |
-          echo ">>> Git status ( excluding generated folder )"
-          # –untracked-files=all  : أظهر كل شيء بما فيه غير المتعقَّب
-          # ':!path'              : استثنِ هذا المسار من النتيجة
-          CHANGES=$(git status --porcelain --untracked-files=all \
-            -- 'pilot_app' ':!pilot_app/lib/generated/lib/src')
+          echo ">>> Git status raw:"
+          git status --porcelain pilot_app
+
+          # تجاهل الأسطر التي تشير إلى تغييرات/حذف/إضافة ضمن المسار التالي:
+          # pilot_app/lib/generated/lib/src/
+          CHANGES=$(git status --porcelain pilot_app \
+            | grep -v -E '^(A|M|D|R|C|\?\?)\s+pilot_app/lib/generated/lib/src/')
 
           if [[ -n "$CHANGES" ]]; then
             echo "::error::Flutter generated code is out of date. Run build_runner and commit changes."
@@ -97,7 +99,7 @@ jobs:
             exit 1
           fi
 
-          echo "✅ لا تغييرات خارج مسار generated – خطوة التحقق اجتازت."
+          echo "No changes outside pilot_app/lib/generated/lib/src/"
 
       - name: 🔍 Static analysis
         working-directory: pilot_app
@@ -112,4 +114,3 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y lcov
           genhtml coverage/lcov.info -o coverage/html
-
