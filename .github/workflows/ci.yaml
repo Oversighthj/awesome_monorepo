@@ -89,7 +89,7 @@ jobs:
           CHANGES=$(git status --porcelain --untracked-files=all pilot_app)
 
           # نستبعد أي سطر ينتهي بـ .g.dart (A, M, D, R, C…)
-          CHANGES=$(echo "$CHANGES" | grep -v -E '\.g\.dart$')
+          CHANGES=$(echo "$CHANGES" | grep -v -E '\.g\.dart$|/serializers\.dart$')
 
           # ──── Debug start ──── ↓↓↓
           echo "---- BEFORE FILTER ----"
