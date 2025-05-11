@@ -85,20 +85,20 @@ jobs:
 
       - name: 🔒 Verify flutter generated sources are committed
         run: |
-          # Show what's in git status for debug:
           echo ">>> Git status raw:"
           git status --porcelain pilot_app
-          
-          # Filter out lines that mention pilot_app/lib/generated/ in any state
+
+          # Filter out lines that mention pilot_app/lib/generated/lib/src/
           CHANGES=$(git status --porcelain pilot_app \
-            | grep -v -E '^(A|M|D|R|C|\?\?)\s+pilot_app/lib/generated/')
-          
+            | grep -v -E '^(A|M|D|R|C|\?\?)\s+pilot_app/lib/generated/lib/src/')
+
           if [[ -n "$CHANGES" ]]; then
             echo "::error::Flutter generated code is out of date. Run build_runner and commit changes."
             echo "$CHANGES"
             exit 1
           fi
-          echo "No changes outside pilot_app/lib/generated"
+
+          echo "No changes outside 'pilot_app/lib/generated/lib/src/'"
 
       - name: 🔍 Static analysis
         working-directory: pilot_app
