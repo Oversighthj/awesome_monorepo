@@ -88,9 +88,9 @@ jobs:
           echo ">>> Git status raw:"
           git status --porcelain pilot_app
 
-          # استبعِد أي سطر يحتوي مسار lib/generated/lib/src/ أياً كانت حالته
+          # Filter out lines in pilot_app/lib/generated/lib/src/ so they won't fail the check
           CHANGES=$(git status --porcelain pilot_app \
-            | grep -v -E '^[[:space:]]*[A-Z\?]{1,2}[[:space:]]+pilot_app/lib/generated/lib/src/')
+            | grep -v -E '^(A|M|D|R|C|\?\?)\s+pilot_app/lib/generated/lib/src/')
 
           if [[ -n "$CHANGES" ]]; then
             echo "::error::Flutter generated code is out of date. Run build_runner and commit changes."
@@ -98,7 +98,7 @@ jobs:
             exit 1
           fi
 
-          echo "No changes outside pilot_app/lib/generated/lib/src/"
+          echo "No changes outside 'pilot_app/lib/generated/lib/src/'"
 
       - name: 🔍 Static analysis
         working-directory: pilot_app
@@ -113,4 +113,3 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y lcov
           genhtml coverage/lcov.info -o coverage/html
-
