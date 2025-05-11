@@ -76,4 +76,4 @@ demo/target/generated-sources/**
 
 
 # built_value outputs داخل حزمة openapi – يُولَّد أثناء build_runner
-pilot_app/lib/generated/lib/src/**/*.g.dart
+/pilot_app/lib/generated/lib/src/**/*.g.dart
