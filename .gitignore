@@ -73,3 +73,7 @@ demo/target/generated-sources/**
 ###############################################################################
 #!pilot_app/lib/**/*.g.dart
 #!pilot_app/lib/**/*.freezed.dart
+
+
+# built_value outputs داخل حزمة openapi – يُولَّد أثناء build_runner
+/pilot_app/lib/generated/lib/src/**/*.g.dart
