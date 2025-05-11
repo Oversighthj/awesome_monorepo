@@ -88,11 +88,9 @@ jobs:
           echo ">>> Git status raw:"
           git status --porcelain pilot_app
 
-          # استخرج كل الأسطر التي **ليست** داخل lib/generated/lib/src/
-          CHANGES=$(
-            git status --porcelain pilot_app \
-              | grep -v -E '^[ A-Z\?]{1,2}[[:space:]]+pilot_app/lib/generated/lib/src/'
-          )
+          # استبعِد أي سطر يحتوي مسار lib/generated/lib/src/ أياً كانت حالته
+          CHANGES=$(git status --porcelain pilot_app \
+            | grep -v -E '^[[:space:]]*[A-Z\?]{1,2}[[:space:]]+pilot_app/lib/generated/lib/src/')
 
           if [[ -n "$CHANGES" ]]; then
             echo "::error::Flutter generated code is out of date. Run build_runner and commit changes."
@@ -100,7 +98,7 @@ jobs:
             exit 1
           fi
 
-          echo "✅ لا تغييرات خارج مجلد الكود المولّد."
+          echo "No changes outside pilot_app/lib/generated/lib/src/"
 
       - name: 🔍 Static analysis
         working-directory: pilot_app
