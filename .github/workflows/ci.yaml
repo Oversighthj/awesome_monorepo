@@ -91,6 +91,14 @@ jobs:
           # نستبعد أي سطر ينتهي بـ .g.dart (A, M, D, R, C…)
           CHANGES=$(echo "$CHANGES" | grep -v -E '\.g\.dart$')
 
+          # ──── Debug start ──── ↓↓↓
+          echo "---- BEFORE FILTER ----"
+          git status --porcelain --untracked-files=all pilot_app
+          echo "---- AFTER FILTER ----"
+          echo "$CHANGES"
+          echo "-----------------------"
+          # ────  Debug end  ──── ↑↑↑
+
           if [[ -n "$CHANGES" ]]; then
             echo "::error::Flutter generated code is out of date. Run build_runner and commit changes."
             echo "$CHANGES"
