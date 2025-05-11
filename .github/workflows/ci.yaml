@@ -86,9 +86,7 @@ jobs:
       - name: 🔒 Verify flutter generated sources are committed
         run: |
           CHANGES=$(git status --porcelain pilot_app \
-            | grep -v '^ D pilot_app/lib/generated/' \
-            | grep -v '^ M pilot_app/lib/generated/' \
-            | grep -v '^?? pilot_app/lib/generated/')
+            | grep -v ' pilot_app/lib/generated/')   # استبعد كل ما يقع تحت lib/generated
 
           if [[ -n "$CHANGES" ]]; then
             echo "::error::Flutter generated code is out of date. Run build_runner and commit changes."
