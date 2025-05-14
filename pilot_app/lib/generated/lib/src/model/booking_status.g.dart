@@ -49,7 +49,7 @@ class _$BookingStatusMeta {
   BuiltSet<BookingStatus> get values => _$values;
 }
 
-abstract class _$BookingStatusMixin {
+mixin _$BookingStatusMixin {
   // ignore: non_constant_identifier_names
   _$BookingStatusMeta get BookingStatus => const _$BookingStatusMeta();
 }
