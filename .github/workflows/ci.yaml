@@ -85,27 +85,15 @@ jobs:
 
       - name: 🔒 Verify flutter generated sources are committed
         run: |
-          # نحصل على التغييرات في pilot_app فقط
-          CHANGES=$(git status --porcelain --untracked-files=all pilot_app)
-
-          # نستبعد أي سطر ينتهي بـ .g.dart (A, M, D, R, C…)
-          CHANGES=$(echo "$CHANGES" | grep -v -E '\.g\.dart$|/serializers\.dart$')
-
-          # ──── Debug start ──── ↓↓↓
-          echo "---- BEFORE FILTER ----"
-          git status --porcelain --untracked-files=all pilot_app
-          echo "---- AFTER FILTER ----"
-          echo "$CHANGES"
-          echo "-----------------------"
-          # ────  Debug end  ──── ↑↑↑
-
-          if [[ -n "$CHANGES" ]]; then
+          # نمرّر القائمة كاملة ثم نستثني أي سطر ينتهي ‎.g.dart‎ أو ‎serializers.dart‎.
+          if git status --porcelain -u=all pilot_app \
+              | grep -q -v -E '\.g\.dart$|/serializers\.dart$'; then
             echo "::error::Flutter generated code is out of date. Run build_runner and commit changes."
-            echo "$CHANGES"
+            git status --porcelain -u=all pilot_app \
+              | grep -v -E '\.g\.dart$|/serializers\.dart$'
             exit 1
           fi
-
-          echo "✅ No changes outside allowed *.g.dart deletions/additions"
+          echo "✅ Generated sources up-to-date (no disallowed changes)"
 
       - name: 🔍 Static analysis
         working-directory: pilot_app
