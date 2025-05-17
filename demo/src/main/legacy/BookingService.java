@@ -5,6 +5,7 @@ import java.time.Instant;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.BookingEntity;
+import com.example.demo.model.BookingStatus;
 import com.example.demo.model.TransportBookingDTO;
 import com.example.demo.repository.BookingRepository;
 
@@ -28,7 +29,7 @@ public class BookingService {
         entity.setFlightId(dto.getFlightId());
         entity.setUserId(dto.getUserId());
         entity.setSeatCount(dto.getSeatCount());
-        entity.setStatus("CONFIRMED");
+        entity.setStatus(BookingStatus.CONFIRMED);
         entity.setBookingTime(Instant.now());
 
         // 3) Persist
