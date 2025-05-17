@@ -69,7 +69,7 @@ def _cmd_exists(cmd: str) -> bool:
 
 def _is_relative_to(child: Path, parent: Path) -> bool:
     try:
-        return child.is_relative_to(parent)  # Py ≥ 3.11
+        return child.is_relative_to(parent)  # Py ≥ 3.9
     except AttributeError:
         try:
             child.relative_to(parent)
